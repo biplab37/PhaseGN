@@ -1,5 +1,8 @@
 module PhaseGN
 
-greet() = print("Hello World!")
+using UsefulFunctions
+
+include("set_variables.jl")
+include("masses.jl")
 
 end # module
