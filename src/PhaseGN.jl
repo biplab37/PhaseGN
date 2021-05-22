@@ -1,3 +1,8 @@
+"""
+    PhaseGN
+
+This module contains many of the functions related to the calculation of various quantities in 2+1 dimensional GN model.
+"""
 module PhaseGN
 
 using UsefulFunctions, Cubature
@@ -8,4 +13,4 @@ include("sigma.jl")
 include("phi.jl")
 include("pressure.jl")
 
-end # module
+end
