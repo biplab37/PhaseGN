@@ -24,7 +24,7 @@ function gE2integ(temp, μ, κ, p,ME)
     m = σ1(temp,μ,κ)
     Ep = sqrt(m^2 + p^2)
 
-    return p*(1 - 1/(1+exp(β*(Ep+μ))) - 1/(1+exp(β*(Ep-μ))))*PrincipleValue(2*Ep - ME)/(Ep*(2*Ep + ME)*pi)
+    return p*(1 - 1/(1+exp(β*(Ep+μ))) - 1/(1+exp(β*(Ep-μ))))*PrincipleValue(2*Ep - ME)/(Ep*(2*Ep + ME)*π)
 end
 
 """
@@ -46,7 +46,7 @@ function M_σ(temp,μ,κ)
     m = σ1(temp,μ,κ)
     func(ME) = ME^2 - 4*m^2 - κ*gE2(temp,μ,κ,ME)/m
     result = fzero(func,0.0,25)
-    if (result == 20 || result == 0.0)
+    if (result == 25 || result == 0.0)
         print("mass not found")
     else
         return result
@@ -62,7 +62,7 @@ function M_ϕ(temp,μ,κ)
     m = σ1(temp,μ,κ)
     func(ME) = ME^2 - κ*gE2(temp,μ,κ,ME)/m
     result = fzero(func,0.0,25)
-    if (result == 20 || result == 0.0)
+    if (result == 25 || result == 0.0)
         print("mass not found")
     else
         return result
