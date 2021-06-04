@@ -42,12 +42,12 @@ function fullrealpart_ϕ(temp,μ,ω,κ)
 	m = σ1(temp,μ,κ)
 	Ep(p) = sqrt(p^2+m^2)
 	integrand(p) = 1/π + p*(1)*(1 - numberF(temp,-μ,Ep(p)) - numberF(temp,μ,Ep(p)))*(PrincipleValue(ω - 2*Ep(p)) - PrincipleValue(ω + 2*Ep(p)))/π
-    return  hquadrature(integrand,0.0,Λ[1],reltol=1e-3,maxevals=10000)[1]
+    return  -1/π + hquadrature(integrand,0.0,Λ[1],reltol=1e-3,maxevals=10000)[1]
 end
 function fullrealpart_ϕ(temp,μ,ω,κ,m)
 	Ep(p) = sqrt(p^2+m^2)
 	integrand(p) = 1/π + p*(1)*(1 - numberF(temp,-μ,Ep(p)) - numberF(temp,μ,Ep(p)))*(PrincipleValue(ω - 2*Ep(p)) - PrincipleValue(ω + 2*Ep(p)))/π
-    return  hquadrature(integrand,0.0,Λ[1],reltol=1e-3,maxevals=10000)[1]
+    return  -1/π + hquadrature(integrand,0.0,Λ[1],reltol=1e-3,maxevals=10000)[1]
 end
 
 """
@@ -62,10 +62,18 @@ function Π0_ϕ(temp,μ,κ)
 	return -1/π + hquadrature(integrand,0.0,Λ[1],reltol=1e-3,maxevals=10000)[1]
 end
 
-"""
+@doc raw"""
 	phasesc_ϕ(temp,μ,ω,κ)
 
 Returns the scattering part of the phase for ϕ₁ and ϕ₂ at zero external momentum.
+
+Also consider the equivalent function 
+
+	phasesc_ϕ(temp,μ,ω,κ,m)
+
+where you supply the values of $\bar{\sigma}_1 = m$. Since these values only depend 
+on the temp and μ, this function is more efficient if you want to calculate phases 
+at different vaules of frequencies at a fixed temp and μ.
 """
 function phasesc_ϕ(temp,μ,ω,κ)
 	repi = realpart_ϕ(temp,μ,ω,κ)
@@ -77,10 +85,20 @@ function phasesc_ϕ(temp,μ,ω,κ,m)
 	impi = imagpart_ϕ(temp,μ,ω,κ,m)
 	return angle(Complex(repi,-impi))
 end
-"""
+
+@doc raw"""
 	phaser_ϕ(temp,μ,ω,κ)
 
 Returns the resonant part of the phase for ϕ₁ and ϕ₂ at zero external momentum.
+
+Also consider the equivalent function 
+
+	phaser_ϕ(temp,μ,ω,κ,m,Π00)
+
+where you supply the values of $\bar{\sigma}_1 = m$ and $\Pi 00$ the frequency 
+and momentum independent part of the polarisation. Since these values only depend 
+on the temp and μ, this function is more efficient if you want to calculate phases
+at different vaules of frequencies at a fixed temp and μ.
 """
 function phaser_ϕ(temp,μ,ω,κ)
     repi = realpart_ϕ(temp,μ,ω,κ)
@@ -96,11 +114,20 @@ function phaser_ϕ(temp,μ,ω,κ,m,Π00)
 	return -angle(Complex(repi - (repi^2 + impi^2)/Π00,-impi))
 end
 
-"""
+@doc raw"""
 	phase_ϕ(temp,μ,ω,κ)
 
 Returns all the phases in an array 
 	[scattered phase, resonant phase, total phase]
+
+Also consider the equivalent function 
+
+	phase_ϕ(temp,μ,ω,κ,m,Π00)
+
+where you supply the values of $\bar{\sigma}_1 = m$ and $\Pi 00$ the frequency
+and momentum independent part of the polarisation. Since these values only depend 
+on the temp and μ, this function is more efficient if you want to calculate phases 
+at different vaules of frequencies at a fixed temp and μ.
 """
 function phase_ϕ(temp,μ,ω,κ)
     repi = realpart_ϕ(temp,μ,ω,κ)
@@ -123,4 +150,4 @@ function phase_ϕ(temp,μ,ω,κ,m,Π00)
 	return [phasesc, phaser, phasesc + phaser]
 end
 
-export imagpart_ϕ, realpart_ϕ, fullrealpart_ϕ, phasesc_ϕ, phaser_ϕ, phase_ϕ
+export imagpart_ϕ, realpart_ϕ, fullrealpart_ϕ, phasesc_ϕ, phaser_ϕ, phase_ϕ, Π0_ϕ

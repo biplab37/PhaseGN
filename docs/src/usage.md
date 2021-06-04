@@ -9,3 +9,5 @@ using PhaseGN
 ## Examples
 
  - [Mass](Example/notebook_mass.jl.html)
+ - [Phase](Example/notebook_phase.jl.html)
+ - [Pressure](Example/notebook_pressure.jl.html)
