@@ -13,5 +13,6 @@ include("sigma.jl")
 include("phi.jl")
 include("pressure.jl")
 include("width.jl")
+include("ext_momentum.jl")
 
 end
