@@ -9,6 +9,7 @@ using UsefulFunctions, Cubature
 
 include("set_variables.jl")
 include("masses.jl")
+include("meanfield.jl")
 include("sigma.jl")
 include("phi.jl")
 include("pressure.jl")

@@ -1,8 +1,10 @@
+# This file contains code for the calculation of width
+
 function realpartI2(temp,μ,κ)
     m = σ1(temp,μ,κ)
     M = M_ϕ(temp,μ,κ)
     Ep(p) = sqrt(p^2+m^2)
-    integrand(p) = p*(1 - numberF(temp,-μ,Ep(p)) - numberF(temp,μ,Ep(p)))*(PrincipleValue(2*Ep(p) - M,1e-4) + 1/(M + 2*Ep(p)))/(8*π*Ep(p)^2)
+    integrand(p) = p*(1 - numberF(temp,-μ,Ep(p)) - numberF(temp,μ,Ep(p)))*(PrincipleValue(2*Ep(p) - M,1e-3) + 1/(M + 2*Ep(p)))/(8*π*Ep(p)^2)
     return hquadrature(integrand,0.0,Λ[1],reltol=1e-2,maxevals=10000)[1]
 end
 
@@ -83,13 +85,14 @@ function Γ_ϕ(temp,μ,κ)
 	m = σ1(temp,μ,κ)
 
 	impi = imagpart_ϕ(temp,μ,ωX,κ,m)
-	repi = realpart_ϕ(temp,μ,ωX,κ,m)
+	rep(ω) = fullrealpart_ϕ(temp,μ,ω,κ,m) - realpart_ϕ(temp,μ,ω,κ,m)
+	repi = rep(ωX)
 
-	drepi = ( realpart_ϕ(temp,μ,ωX+dω,κ,m) - repi )/dω
-	dimpi = ( imagpart_ϕ(temp,μ,ωX+dω,κ,m) - impi )/dω
+	drepi = ( rep(sqrt(ωX^2+dω)) - rep(ωX) )/dω
+	dimpi = 0.0 #( imagpart_ϕ(temp,μ,ωX+dω,κ,m) - impi )/dω
 
 
-	return  -impi/(ωX*(drepi - 2*repi*(repi*drepi + impi*dimpi)/(repi^2+impi^2)))
+	return 2*impi/((drepi - 2*repi*(repi*drepi + impi*dimpi)/(repi^2+impi^2)))
 end
 
 export Γϕ, Γϕ2, phaseBW_ϕ,Γ_ϕ
