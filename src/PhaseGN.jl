@@ -7,7 +7,7 @@ module PhaseGN
 
 using UsefulFunctions, Cubature
 
-include("set_variables.jl")
+include("parameters.jl")
 include("masses.jl")
 include("meanfield.jl")
 include("sigma.jl")
