@@ -15,3 +15,5 @@ end
 function default_parameters()
     p = Parameters()
 end
+
+export Parameters, default_parameters
