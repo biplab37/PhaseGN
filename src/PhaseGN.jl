@@ -5,8 +5,9 @@ This module contains many of the functions related to the calculation of various
 """
 module PhaseGN
 
-using UsefulFunctions, Cubature
+using Cubature
 
+include("helperfunction.jl")
 include("set_variables.jl")
 include("masses.jl")
 include("meanfield.jl")
