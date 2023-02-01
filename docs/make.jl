@@ -10,3 +10,7 @@ makedocs(
         hide("Indices" => "indices.md")
     ]
 )
+
+deploydocs(
+    repo = "github.com/biplab37/PhaseGN.git",
+)
