@@ -5,4 +5,3 @@ version = "0.1.0"
 
 [deps]
 Cubature = "667455a9-e2ce-5579-9412-b964f529a492"
-UsefulFunctions = "3faa5a7b-8411-4986-9283-d50561d89da5"
