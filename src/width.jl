@@ -1,47 +1,47 @@
 # This file contains code for the calculation of width
 
-function realpartI2(temp,μ,κ)
-    m = σ1(temp,μ,κ)
-    M = M_ϕ(temp,μ,κ)
+function realpartI2(temp,μ,param)
+    m = σ1(temp,μ,param)
+    M = M_ϕ(temp,μ,param)
     Ep(p) = sqrt(p^2+m^2)
     integrand(p) = p*(1 - numberF(temp,-μ,Ep(p)) - numberF(temp,μ,Ep(p)))*(PrincipleValue(2*Ep(p) - M,1e-3) + 1/(M + 2*Ep(p)))/(8*π*Ep(p)^2)
-    return hquadrature(integrand,0.0,Λ[1],reltol=1e-2,maxevals=10000)[1]
+    return hquadrature(integrand,0.0,param.Λ,reltol=1e-2,maxevals=10000)[1]
 end
 
-function imagpartI2(temp, μ,κ)
-    m = σ1(temp,μ,κ)
-    M = M_ϕ(temp,μ,κ)
+function imagpartI2(temp, μ,param)
+    m = σ1(temp,μ,param)
+    M = M_ϕ(temp,μ,param)
     Nσ = M^2 - 4*m^2
-    if Nσ > 0 && abs(M) < 2*sqrt(Λ[1]^2 + m^2)
+    if Nσ > 0 && abs(M) < 2*sqrt(param.Λ^2 + m^2)
         return (1 - numberF(temp,-μ,M/2) - numberF(temp,μ,M/2))/(8*M)
     else
         return 0.0
     end
 end
 
-function I1(temp,μ,κ)
-    m = σ1(temp,μ,κ)
+function I1(temp,μ,param)
+    m = σ1(temp,μ,param)
     Ep(p) = sqrt(p^2+m^2)
     integrand(p) = 1/(2*π) - 2*p*(1 - numberF(temp,-μ,Ep(p)) - numberF(temp,μ,Ep(p)))/(4*π*Ep(p))
-    return -1/(2*π) + hquadrature(integrand,0.0,Λ[1],reltol=1e-2,maxevals=10000)[1]
+    return -1/(2*π) + hquadrature(integrand,0.0,param.Λ,reltol=1e-2,maxevals=10000)[1]
 end
 
-function Γϕ(temp,μ,κ)
-    M = M_ϕ(temp,μ,κ)
-    imp = imagpartI2(temp,μ,κ)
-    rep = realpartI2(temp,μ,κ)
-    i1 = I1(temp,μ,κ)
+function Γϕ(temp,μ,param)
+    M = M_ϕ(temp,μ,param)
+    imp = imagpartI2(temp,μ,param)
+    rep = realpartI2(temp,μ,param)
+    i1 = I1(temp,μ,param)
 
     Γ = (i1*imp/((imp^2+rep^2)*M))
     return Γ
 end
 
-function Γϕ2(temp,μ,κ)
-	m = σ1(temp,μ,κ)
-    M = M_ϕ(temp,μ,κ)
-    imp = imagpartI2(temp,μ,κ)
-    rep = realpartI2(temp,μ,κ)
-    i1 = I1(temp,μ,κ)
+function Γϕ2(temp,μ,param)
+	m = σ1(temp,μ,param)
+    M = M_ϕ(temp,μ,param)
+    imp = imagpartI2(temp,μ,param)
+    rep = realpartI2(temp,μ,param)
+    i1 = I1(temp,μ,param)
     x = M^2 - (i1*rep/((imp^2+rep^2)))
 
     if x>=0
@@ -51,10 +51,10 @@ function Γϕ2(temp,μ,κ)
     end
 end
 
-function phaseBW_ϕ(temp,μ,ω,κ)
-	Γ = Γϕ(temp,μ,κ)
-	m = σ1(temp,μ,κ)
-	M = M_ϕ(temp,μ,κ)
+function phaseBW_ϕ(temp,μ,ω,param)
+	Γ = Γϕ(temp,μ,param)
+	m = σ1(temp,μ,param)
+	M = M_ϕ(temp,μ,param)
 	if 2*m >= M
 		if ω<= 2*m
 			return 0.0
@@ -66,7 +66,7 @@ function phaseBW_ϕ(temp,μ,ω,κ)
     end
 end
 
-function phaseBW_ϕ(temp,μ,ω,κ,m,M,Γ)
+function phaseBW_ϕ(temp,μ,ω,m,M,Γ,param)
 	if Γ == 0
 		if ω< 2*m
 			return 0.0
@@ -78,18 +78,18 @@ function phaseBW_ϕ(temp,μ,ω,κ,m,M,Γ)
     end
 end
 
-function Γ_ϕ(temp,μ,κ)
+function Γ_ϕ(temp,μ,param)
 	dω = 1e-2
 
-	ωX = M_ϕ(temp,μ,κ)
-	m = σ1(temp,μ,κ)
+	ωX = M_ϕ(temp,μ,param)
+	m = σ1(temp,μ,param)
 
-	impi = imagpart_ϕ(temp,μ,ωX,κ,m)
-	rep(ω) = fullrealpart_ϕ(temp,μ,ω,κ,m) - realpart_ϕ(temp,μ,ω,κ,m)
+	impi = imagpart_ϕ(temp,μ,ωX,m,param)
+	rep(ω) = fullrealpart_ϕ(temp,μ,ω,m,param) - realpart_ϕ(temp,μ,ω,m,param)
 	repi = rep(ωX)
 
 	drepi = ( rep(sqrt(ωX^2+dω)) - rep(ωX) )/dω
-	dimpi = 0.0 #( imagpart_ϕ(temp,μ,ωX+dω,κ,m) - impi )/dω
+	dimpi = 0.0 #( imagpart_ϕ(temp,μ,ωX+dω,m,param) - impi )/dω
 
 
 	return 2*impi/((drepi - 2*repi*(repi*drepi + impi*dimpi)/(repi^2+impi^2)))
