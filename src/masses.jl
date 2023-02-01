@@ -20,14 +20,14 @@ function σ1(temp,μ, param::Parameters)
 end
 
 function σ1(temp,μ)
-    p = Parameters()
+    param = Parameters()
     @warn("No parameters given, using default parameters: κ = 0.0, M = 1.0")
     β = 1/temp
 	
 	## The gap equation
     σ₁(σ) = (1 + 2*cosh(β*μ)*exp(-β*σ) + exp(-2*β*σ) - exp(β*(param.M - σ + (π*param.κ/σ))))
 	
-    result = fzero(σ₁,1e-4,4)
+    result = bisection(σ₁,1e-4,4)
 	
     ## For the case when there is no zero in the interval
 	if (4.0-result<1e-3 || result == 1e-4)
