@@ -43,7 +43,7 @@ function gE2integ(temp, μ, p,ME,param::Parameters)
     m = σ1(temp,μ,param)
     Ep = sqrt(m^2 + p^2)
 
-    return p*(1 - 1/(1+exp(β*(Ep+μ))) - 1/(1+exp(β*(Ep-μ))))*PrincipleValue(2*Ep - ME)/(Ep*(2*Ep + ME)*π)
+    return p*(1 - 1/(1+exp(β*(Ep+μ))) - 1/(1+exp(β*(Ep-μ))))*PrincipalValue(2*Ep - ME)/(Ep*(2*Ep + ME)*π)
 end
 
 """

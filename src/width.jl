@@ -4,7 +4,7 @@ function realpartI2(temp,μ,param)
     m = σ1(temp,μ,param)
     M = M_ϕ(temp,μ,param)
     Ep(p) = sqrt(p^2+m^2)
-    integrand(p) = p*(1 - numberF(temp,-μ,Ep(p)) - numberF(temp,μ,Ep(p)))*(PrincipleValue(2*Ep(p) - M,1e-3) + 1/(M + 2*Ep(p)))/(8*π*Ep(p)^2)
+    integrand(p) = p*(1 - numberF(temp,-μ,Ep(p)) - numberF(temp,μ,Ep(p)))*(PrincipalValue(2*Ep(p) - M,1e-3) + 1/(M + 2*Ep(p)))/(8*π*Ep(p)^2)
     return hquadrature(integrand,0.0,param.Λ,reltol=1e-2,maxevals=10000)[1]
 end
 
