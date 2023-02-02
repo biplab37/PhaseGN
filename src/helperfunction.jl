@@ -16,3 +16,15 @@ function bisection(func::Function, start::Number, finish::Number, iteration::Int
     end
     return mid
 end
+
+"""
+	PrincipleValue(x::Float64,ϵ::Float64 = 1e-3)
+Useful function in Principle Value Integration.
+"""
+function PrincipleValue(x,ϵ = 1e-3)
+	if abs(x)<ϵ
+		return 0.0
+	else
+		return 1/x
+	end
+end
