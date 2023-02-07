@@ -12,11 +12,11 @@ function pressure_MF(temp,μ,param::Parameters;norm=false::Bool)
 end
 
 function energy_MF(temp,μ,param)
-	
+	return nothing
 end
 
 function number_MF(temp,μ,param)
-	
+	return nothing
 end
 
 export pressure_MF, energy_MF, number_MF

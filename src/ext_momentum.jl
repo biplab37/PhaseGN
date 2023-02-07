@@ -79,7 +79,7 @@ Uses `imagpart_ϕ_q` and Kramer-Cronig Relation for the calculation
 """
 function realpart_ϕ_q(temp, μ, ω, q, param)
 	
-	integrand(ν) = 2*ν*imagpart_ϕ_q(temp,μ,ν,q,param)*(PrincipleValue(ν^2 - ω^2) - PrincipleValue(ν^2))/π
+	integrand(ν) = 2*ν*imagpart_ϕ_q(temp,μ,ν,q,param)*(PrincipalValue(ν^2 - ω^2) - PrincipalValue(ν^2))/π
 	int1(ν) = integrand(1/(1 - ν))/(1 - ν)^2
 
 	return hquadrature(integrand,0,1,reltol=1e-2,maxevals=10000)[1]  + hquadrature(int1,0,1,reltol=1e-2,maxevals=10000)[1]
@@ -87,7 +87,7 @@ end
 
 function realpart_ϕ_q(temp, μ, ω, q, m, param)
 	
-	integrand(ν) = 2*ν*imagpart_ϕ_q(temp,μ,ν,q,m,param)*(PrincipleValue(ν^2 - ω^2) - PrincipleValue(ν^2))/π
+	integrand(ν) = 2*ν*imagpart_ϕ_q(temp,μ,ν,q,m,param)*(PrincipalValue(ν^2 - ω^2) - PrincipalValue(ν^2))/π
 	int1(ν) = integrand(1/(1 - ν))/(1 - ν)^2
 
 	return hquadrature(integrand,0,1,reltol=1e-2,maxevals=10000)[1]  + hquadrature(int1,0,1,reltol=1e-2,maxevals=10000)[1]
@@ -254,14 +254,14 @@ Returns the real part of the polarisation for σ₁ and σ₂ at external moment
 """
 function realpart_σ_q(temp, μ, ω, q, param)
 
-	integrand(ν) = 2*ν*imagpart_σ_q(temp,μ,ν,q,param)*(PrincipleValue(ν^2 - ω^2) - PrincipleValue(ν^2))/π
+	integrand(ν) = 2*ν*imagpart_σ_q(temp,μ,ν,q,param)*(PrincipalValue(ν^2 - ω^2) - PrincipalValue(ν^2))/π
 	int(ν) = integrand(1/(1 - ν))/(1 - ν)^2
 
 	return hquadrature(integrand,0,1,reltol=1e-2,maxevals=10000)[1]  + hquadrature(int,0,1,reltol=1e-2,maxevals=10000)[1]
 end
 
 function realpart_σ_q(temp,μ, ω, q, m, param)
-	integrand(ν) = 2*ν*imagpart_σ_q(temp,μ,ν,q,m,param)*(PrincipleValue(ν^2 - ω^2) - PrincipleValue(ν^2))
+	integrand(ν) = 2*ν*imagpart_σ_q(temp,μ,ν,q,m,param)*(PrincipalValue(ν^2 - ω^2) - PrincipalValue(ν^2))
 	int(ν) = integrand(1/(1 - ν))/(1 - ν)^2
 
 	return hquadrature(integrand,0,1,reltol=1e-2,maxevals=10000)[1]  + hquadrature(int,0,1,reltol=1e-2,maxevals=10000)[1]

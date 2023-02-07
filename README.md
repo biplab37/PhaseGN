@@ -22,3 +22,5 @@ p = Parameters()
 
 phase_ϕ(temp,μ,ω,p)
 ```
+
+For more detailed examples see the documentation.

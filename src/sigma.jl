@@ -42,26 +42,26 @@ Returns the real part of the polarisation for σ₁ and σ₂ at zero external m
 function realpart_σ(temp,μ,ω,param)
     m = σ1(temp,μ,param)
     Ep(p) = sqrt(p^2+m^2)
-    integrand(p) = - p*(p^2/Ep(p)^2)*(1 - numberF(temp,-μ,Ep(p)) - numberF(temp,μ,Ep(p)))*(PrincipleValue(ω - 2*Ep(p)) - PrincipleValue(ω + 2*Ep(p)) + PrincipleValue(Ep(p)))/π
+    integrand(p) = - p*(p^2/Ep(p)^2)*(1 - numberF(temp,-μ,Ep(p)) - numberF(temp,μ,Ep(p)))*(PrincipalValue(ω - 2*Ep(p)) - PrincipalValue(ω + 2*Ep(p)) + PrincipalValue(Ep(p)))/π
     return hquadrature(integrand,0.0,param.Λ,reltol=1e-3,maxevals=10000)[1]
 end
 
 function realpart_σ(temp,μ,ω,m,param)
     Ep(p) = sqrt(p^2+m^2)
-    integrand(p) = - p*(p^2/Ep(p)^2)*(1 - numberF(temp,-μ,Ep(p)) - numberF(temp,μ,Ep(p)))*(PrincipleValue(ω - 2*Ep(p)) - PrincipleValue(ω + 2*Ep(p)) + PrincipleValue(Ep(p)))/π
+    integrand(p) = - p*(p^2/Ep(p)^2)*(1 - numberF(temp,-μ,Ep(p)) - numberF(temp,μ,Ep(p)))*(PrincipalValue(ω - 2*Ep(p)) - PrincipalValue(ω + 2*Ep(p)) + PrincipalValue(Ep(p)))/π
     return hquadrature(integrand,0.0,param.Λ,reltol=1e-3,maxevals=10000)[1]
 end
 
 function fullrealpart_σ(temp,μ,ω,param)
     m = σ1(temp,μ,param)
     Ep(p) = sqrt(p^2+m^2)
-    integrand(p) = 1/π + p*(p^2/Ep(p)^2)*(1 - numberF(temp,-μ,Ep(p)) - numberF(temp,μ,Ep(p)))*(PrincipleValue(ω - 2*Ep(p)) - PrincipleValue(ω + 2*Ep(p)))/π
+    integrand(p) = 1/π + p*(p^2/Ep(p)^2)*(1 - numberF(temp,-μ,Ep(p)) - numberF(temp,μ,Ep(p)))*(PrincipalValue(ω - 2*Ep(p)) - PrincipalValue(ω + 2*Ep(p)))/π
     return  -1/π +hquadrature(integrand,0.0,param.Λ,reltol=1e-3,maxevals=10000)[1]
 end
 
 function fullrealpart_σ(temp,μ,ω,m,param)
     Ep(p) = sqrt(p^2+m^2)
-    integrand(p) = 1/π + p*(p^2/Ep(p)^2)*(1 - numberF(temp,-μ,Ep(p)) - numberF(temp,μ,Ep(p)))*(PrincipleValue(ω - 2*Ep(p)) - PrincipleValue(ω + 2*Ep(p)))/π
+    integrand(p) = 1/π + p*(p^2/Ep(p)^2)*(1 - numberF(temp,-μ,Ep(p)) - numberF(temp,μ,Ep(p)))*(PrincipalValue(ω - 2*Ep(p)) - PrincipalValue(ω + 2*Ep(p)))/π
     return  -1/π +hquadrature(integrand,0.0,param.Λ,reltol=1e-3,maxevals=10000)[1]
 end
 

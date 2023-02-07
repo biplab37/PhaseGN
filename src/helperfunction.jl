@@ -18,13 +18,22 @@ function bisection(func::Function, start::Number, finish::Number, iteration::Int
 end
 
 """
-	PrincipleValue(x::Float64,ϵ::Float64 = 1e-3)
+	PrincipalValue(x::Float64,ϵ::Float64 = 1e-3)
 Useful function in Principle Value Integration.
 """
-function PrincipleValue(x,ϵ = 1e-3)
+function PrincipalValue(x,ϵ = 1e-3)
 	if abs(x)<ϵ
 		return 0.0
 	else
 		return 1/x
 	end
+end
+
+"""
+	numberF(temp::Float64, μ::Float64, Energy::Float64)
+Returns the number density at a given `Energy`, chemical potential `μ` and `temp` for Fermionic Species.
+"""
+function numberF(temp, μ, Energy)
+	β = 1/temp
+    return 1/(1+exp(β*(Energy - μ)))
 end
