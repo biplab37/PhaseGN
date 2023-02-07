@@ -1,4 +1,4 @@
-Base.@kwdef mutable struct Parameters
+Base.@kwdef struct Parameters
     # parameters for the model.
     Λ::Float64 = 100.0 # cutoff for the regularisation
     κ::Float64 = 0.0

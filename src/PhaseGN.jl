@@ -16,5 +16,6 @@ include("phi.jl")
 include("pressure.jl")
 include("width.jl")
 include("ext_momentum.jl")
+include("structure_facator.jl")
 
 end
