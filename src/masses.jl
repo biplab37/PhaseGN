@@ -65,7 +65,7 @@ function M_σ(temp,μ,param::Parameters)
     m = σ1(temp,μ,param)
     func(ME) = ME^2 - 4*m^2 - param.κ*gE2(temp,μ,ME,param)/m
     result = bisection(func,0.0,5)
-    if (result ≈ 25 || result == 0.0)
+    if (result ≈ 5 || result == 0.0)
         print("mass not found")
     else
         return result
@@ -81,7 +81,7 @@ function M_ϕ(temp,μ,param::Parameters)
     m = σ1(temp,μ,param)
     func(ME) = ME^2 - param.κ*gE2(temp,μ,ME,param)/m
     result = bisection(func,0.0,5)
-    if (result == 25 || result == 0.0)
+    if (result == 5 || result == 0.0)
         print("mass not found")
     else
         return result

@@ -5,7 +5,7 @@ This module contains many of the functions related to the calculation of various
 """
 module PhaseGN
 
-using Cubature
+using Cubature, PolyLog
 
 include("parameters.jl")
 include("helperfunction.jl")
