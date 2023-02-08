@@ -8,6 +8,7 @@ param = Parameters()
         @test PhaseGN.bisection(x->x^2-2,0,2) ≈ √2 atol=1e-6
     end
     @testset "Principal Value" begin
+        @test PhaseGN.PrincipalValue(0.0) == 0.0
         @test PhaseGN.PrincipalValue(1e-2,1e-3) == 100.0
         @test PhaseGN.PrincipalValue(1e-3,1e-2) == 0.0
     end
@@ -43,11 +44,10 @@ end
     include("pressure_test.jl")
 end
 
-## Future Works, currently gettting skipped
-
 @testset "Mean Field" begin
     @test pressure_MF(0.01,0.0,param) < 0.001
     @test pressure_MF(0.01,0.0,param) < 0.01
-    @test energy_MF(0.01,0.0,param) < 0.01 skip=true
-    @test number_MF(rand(),rand(),param) >= 0.0 skip=true
+    @test 0.0< energy_MF(0.01,0.0,param) < 0.01
+    @test energy_MF(rand(),rand(),param) >= 0.0
+    @test number_MF(rand(),rand(),param) >= 0.0 
 end
