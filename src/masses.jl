@@ -53,7 +53,7 @@ Returns the square of the induced Fermion-exciton coupling constant.
 """
 function gE2(temp,μ,ME,param::Parameters)
     func(p) = gE2integ(temp,μ,p,ME, param)
-    return 1/hquadrature(func,0,param.Λ,reltol=1e-3,maxevals=10000)[1]
+    return 1/integrate(func,0,param.Λ)
 end
 
 """

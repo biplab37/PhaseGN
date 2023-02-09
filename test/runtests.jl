@@ -30,14 +30,16 @@ end
     @test -π <= phasesc_σ(rand(),rand(),rand(),param) <= 0.0 
     @test 0.0 <= phaser_σ(rand(),rand(),rand(),param) <= π
     @test phase_σ(0.1,0.1,0.1,param)[1:2] == [phasesc_σ(0.1,0.1,0.1,param), phaser_σ(0.1,0.1,0.1,param)]
+    @test phase_σ(rand(),rand(),rand(),param)[3] >= 0.0
 end
 
 @testset "Pseudo-Scalar Channel" begin
     @test imagpart_ϕ(0.01,0.0,0.1,param) ≈ 0.0 atol=1e-3
 
-    @test -π <= phasesc_ϕ(rand(),rand(),rand(),param) <= 0.0
-    @test 0.0 <= phaser_ϕ(rand(),rand(),rand(),param) <= π
-    @test phase_ϕ(0.1,0.1,0.1,param)[1:2] == [phasesc_ϕ(0.1,0.1,0.1,param), phaser_ϕ(0.1,0.1,0.1,param)]   
+    @test -π <= phasesc_ϕ(rand(),rand(),100*rand(),param) <= 0.0
+    @test 0.0 <= phaser_ϕ(rand(),rand(),100*rand(),param) <= π
+    @test phase_ϕ(0.1,0.1,0.1,param)[1:2] == [phasesc_ϕ(0.1,0.1,0.1,param), phaser_ϕ(0.1,0.1,0.1,param)]
+    @test phase_ϕ(rand(),rand(),100*rand(),param)[3] >= 0.0
 end
 
 @testset "Pressure" begin
@@ -50,4 +52,8 @@ end
     @test 0.0< energy_MF(0.01,0.0,param) < 0.01
     @test energy_MF(rand(),rand(),param) >= 0.0
     @test number_MF(rand(),rand(),param) >= 0.0 
+end
+
+@testset "Parameter" begin
+    @test typeof(default_parameters()) == Parameters
 end

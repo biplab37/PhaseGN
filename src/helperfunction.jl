@@ -37,3 +37,9 @@ function numberF(temp, μ, Energy)
 	β = 1/temp
     return 1/(1+exp(β*(Energy - μ)))
 end
+
+# using QuadGK
+function integrate(func::Function,start, finish;maxevals=100000)
+	return hquadrature(func,start,finish,reltol=1e-3,maxevals=maxevals)[1]
+	# return quadgk(func,start,finish,rtol=1e-3,maxevals=maxevals)[1]
+end

@@ -31,7 +31,7 @@ function Π0_σ(temp,μ,param)
     m = σ1(temp,μ,param)
     Ep(p) = sqrt(p^2+m^2)
     integrand(p) = 1/π - p*(p^2/Ep(p)^2)*(1 - numberF(temp,-μ,Ep(p)) - numberF(temp,μ,Ep(p)))/(π*Ep(p))
-    return -1/π + hquadrature(integrand,0.0,param.Λ,reltol=1e-3,maxevals=10000)[1]
+    return -1/π + integrate(integrand,0.0,param.Λ)
 end
 
 """
@@ -43,26 +43,26 @@ function realpart_σ(temp,μ,ω,param)
     m = σ1(temp,μ,param)
     Ep(p) = sqrt(p^2+m^2)
     integrand(p) = - p*(p^2/Ep(p)^2)*(1 - numberF(temp,-μ,Ep(p)) - numberF(temp,μ,Ep(p)))*(PrincipalValue(ω - 2*Ep(p)) - PrincipalValue(ω + 2*Ep(p)) + PrincipalValue(Ep(p)))/π
-    return hquadrature(integrand,0.0,param.Λ,reltol=1e-3,maxevals=10000)[1]
+    return integrate(integrand,0.0,param.Λ)
 end
 
 function realpart_σ(temp,μ,ω,m,param)
     Ep(p) = sqrt(p^2+m^2)
     integrand(p) = - p*(p^2/Ep(p)^2)*(1 - numberF(temp,-μ,Ep(p)) - numberF(temp,μ,Ep(p)))*(PrincipalValue(ω - 2*Ep(p)) - PrincipalValue(ω + 2*Ep(p)) + PrincipalValue(Ep(p)))/π
-    return hquadrature(integrand,0.0,param.Λ,reltol=1e-3,maxevals=10000)[1]
+    return integrate(integrand,0.0,param.Λ)
 end
 
 function fullrealpart_σ(temp,μ,ω,param)
     m = σ1(temp,μ,param)
     Ep(p) = sqrt(p^2+m^2)
     integrand(p) = 1/π + p*(p^2/Ep(p)^2)*(1 - numberF(temp,-μ,Ep(p)) - numberF(temp,μ,Ep(p)))*(PrincipalValue(ω - 2*Ep(p)) - PrincipalValue(ω + 2*Ep(p)))/π
-    return  -1/π +hquadrature(integrand,0.0,param.Λ,reltol=1e-3,maxevals=10000)[1]
+    return  -1/π +integrate(integrand,0.0,param.Λ)
 end
 
 function fullrealpart_σ(temp,μ,ω,m,param)
     Ep(p) = sqrt(p^2+m^2)
     integrand(p) = 1/π + p*(p^2/Ep(p)^2)*(1 - numberF(temp,-μ,Ep(p)) - numberF(temp,μ,Ep(p)))*(PrincipalValue(ω - 2*Ep(p)) - PrincipalValue(ω + 2*Ep(p)))/π
-    return  -1/π +hquadrature(integrand,0.0,param.Λ,reltol=1e-3,maxevals=10000)[1]
+    return  -1/π +integrate(integrand,0.0,param.Λ)
 end
 
 @doc raw"""
@@ -81,13 +81,13 @@ at different vaules of frequencies at a fixed temp and μ.
 function phasesc_σ(temp,μ,ω,param)
     repi = realpart_σ(temp,μ,ω,param)
     impi = imagpart_σ(temp,μ,ω,param)
-    return angle(Complex(repi,-impi))
+    return -angle(Complex(repi,impi))
 end
 
 function phasesc_σ(temp,μ,ω,m,param)
     repi = realpart_σ(temp,μ,ω,m,param)
     impi = imagpart_σ(temp,μ,ω,m,param)
-    return angle(Complex(repi,-impi))
+    return -angle(Complex(repi,impi))
 end
 
 @doc raw"""
@@ -140,7 +140,7 @@ function phase_σ(temp,μ,ω,param)
     impi = imagpart_σ(temp,μ,ω,param)
     Π00 = Π0_σ(temp,μ,param)
 
-    phasesc = angle(Complex(repi,-impi))
+    phasesc = -angle(Complex(repi,impi))
     phaser = -angle(Complex(repi - (repi^2 + impi^2)/Π00,-impi))
 
     return [phasesc, phaser, phasesc + phaser]
@@ -150,7 +150,7 @@ function phase_σ(temp,μ,ω,m,Π00,param)
     repi = realpart_σ(temp,μ,ω,m,param)
     impi = imagpart_σ(temp,μ,ω,m,param)
 
-    phasesc = angle(Complex(repi,-impi))
+    phasesc = -angle(Complex(repi,impi))
     phaser = -angle(Complex(repi - (repi^2 + impi^2)/Π00,-impi))
 
     return [phasesc, phaser, phasesc + phaser]

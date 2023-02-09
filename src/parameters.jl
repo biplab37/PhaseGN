@@ -5,6 +5,10 @@ Base.@kwdef struct Parameters
     M::Float64 = 1.0
 end
 
+import Base.Broadcast: broadcastable
+
+broadcastable(p::Parameters) = Ref(p)
+
 function Base.show(io::IO,::MIME"text/plain",p::Parameters)
     println(io,"Parameters:")
     println(io,"Λ = ",p.Λ)

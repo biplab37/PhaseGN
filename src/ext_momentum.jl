@@ -24,18 +24,18 @@ function imagpart_ϕ_q(temp,μ,ω,q,param)
 			p2 = (q + ω*sqrt(1 - 4*m^2/s))/2
 			integrand(p) = s*(numberF(temp,μ,-ω + Ep(p)) - numberF(temp,μ,Ep(p)))/(8*π*q*Ep(p)*sqrt(1 - ((s - 2*ω*Ep(p))/(2*p*q))^2))
 
-			result = hquadrature(integrand,p1,p2,reltol=1e-2,maxevals=10000)[1]
+			result = integrate(integrand,p1,p2)
 		end
 	else 
 		p1 = abs(-q + ω*sqrt(1 - 4*m^2/s))/2
 		p2 = (q + ω*sqrt(1 - 4*m^2/s))/2
 		integrand1(p) = -s*(numberF(temp,μ,-ω - Ep(p)) - numberF(temp,μ,-Ep(p)))/(8*π*q*Ep(p)*sqrt(1 - ((s + 2*ω*Ep(p))/(2*p*q))^2))
-		result = hquadrature(integrand1,p1,p2,reltol=1e-2,maxevals=10000)[1]
+		result = integrate(integrand1,p1,p2)
 
 		integrand2(p) = -s*(numberF(temp,μ,-ω - Ep(p)) - numberF(temp,μ,-Ep(p)))/(8*π*q*Ep(p)*sqrt(1 - ((s + 2*ω*Ep(p))/(2*p*q))^2)) - s*(numberF(temp,μ,-ω + Ep(p)) - numberF(temp,μ,Ep(p)))/(8*π*q*Ep(p)*sqrt(1 - ((s - 2*ω*Ep(p))/(2*p*q))^2))
 		# int1(p) = integrand2(1/(1 - p))/(1 - p)^2
 
-		result += hquadrature(integrand2,p2,param.Λ,reltol=1e-2,maxevals=10000)[1]
+		result += integrate(integrand2,p2,param.Λ)
 	end
 
 	return result
@@ -53,18 +53,18 @@ function imagpart_ϕ_q(temp,μ,ω,q,m,param)
 			p2 = (q + ω*sqrt(1 - 4*m^2/s))/2
 			integrand(p) = s*(numberF(temp,μ,-ω + Ep(p)) - numberF(temp,μ,Ep(p)))/(8*π*q*Ep(p)*sqrt(1 - ((s - 2*ω*Ep(p))/(2*p*q))^2))
 
-			result = hquadrature(integrand,p1,p2,reltol=1e-2,maxevals=10000)[1]
+			result = integrate(integrand,p1,p2)
 		end
 	else 
 		p1 = abs(-q + ω*sqrt(1 - 4*m^2/s))/2
 		p2 = (q + ω*sqrt(1 - 4*m^2/s))/2
 		integrand1(p) = -s*(numberF(temp,μ,-ω - Ep(p)) - numberF(temp,μ,-Ep(p)))/(8*π*q*Ep(p)*sqrt(1 - ((s + 2*ω*Ep(p))/(2*p*q))^2))
-		result = hquadrature(integrand1,p1,p2,reltol=1e-2,maxevals=10000)[1]
+		result = integrate(integrand1,p1,p2)
 
 		integrand2(p) = -s*(numberF(temp,μ,-ω - Ep(p)) - numberF(temp,μ,-Ep(p)))/(8*π*q*Ep(p)*sqrt(1 - ((s + 2*ω*Ep(p))/(2*p*q))^2)) - s*(numberF(temp,μ,-ω + Ep(p)) - numberF(temp,μ,Ep(p)))/(8*π*q*Ep(p)*sqrt(1 - ((s - 2*ω*Ep(p))/(2*p*q))^2))
 		int1(p) = integrand2(1/(1 - p))/(1 - p)^2
 
-		result += hquadrature(int1,1 - 1/p2,1,reltol=1e-2,maxevals=10000)[1]
+		result += integrate(int1,1 - 1/p2,1)
 	end
 
 	return result
@@ -82,7 +82,7 @@ function realpart_ϕ_q(temp, μ, ω, q, param)
 	integrand(ν) = 2*ν*imagpart_ϕ_q(temp,μ,ν,q,param)*(PrincipalValue(ν^2 - ω^2) - PrincipalValue(ν^2))/π
 	int1(ν) = integrand(1/(1 - ν))/(1 - ν)^2
 
-	return hquadrature(integrand,0,1,reltol=1e-2,maxevals=10000)[1]  + hquadrature(int1,0,1,reltol=1e-2,maxevals=10000)[1]
+	return integrate(integrand,0,1,reltol=1e-2,maxevals=10000)[1]  + hquadrature(int1,0,1)
 end
 
 function realpart_ϕ_q(temp, μ, ω, q, m, param)
@@ -90,7 +90,7 @@ function realpart_ϕ_q(temp, μ, ω, q, m, param)
 	integrand(ν) = 2*ν*imagpart_ϕ_q(temp,μ,ν,q,m,param)*(PrincipalValue(ν^2 - ω^2) - PrincipalValue(ν^2))/π
 	int1(ν) = integrand(1/(1 - ν))/(1 - ν)^2
 
-	return hquadrature(integrand,0,1,reltol=1e-2,maxevals=10000)[1]  + hquadrature(int1,0,1,reltol=1e-2,maxevals=10000)[1]
+	return integrate(integrand,0,1,reltol=1e-2,maxevals=10000)[1]  + hquadrature(int1,0,1)
 end
 
 @doc raw"""
@@ -205,16 +205,16 @@ function imagpart_σ_q(temp,μ,ω,q,param)
 			p2 = (q + ω*sqrt(1 - 4*m^2/s))/2
 			integrand(p) = (s-4*m^2)*(numberF(temp,μ,-ω + Ep(p)) - numberF(temp,μ,Ep(p)))/(8*π*q*Ep(p)*sqrt(1 - ((s - 2*ω*Ep(p))/(2*p*q))^2))
 
-			result = hquadrature(integrand,p1,p2,reltol=1e-2,maxevals=10000)[1]
+			result = integrate(integrand,p1,p2)
 		end
 	else 
 		p1 = abs(-q + ω*sqrt(1 - 4*m^2/s))/2
 		p2 = (q + ω*sqrt(1 - 4*m^2/s))/2
 		integrand1(p) = -(s-4*m^2)*(numberF(temp,μ,-ω - Ep(p)) - numberF(temp,μ,-Ep(p)))/(8*π*q*Ep(p)*sqrt(1 - ((s + 2*ω*Ep(p))/(2*p*q))^2))
-		result = hquadrature(integrand1,p1,p2,reltol=1e-2,maxevals=10000)[1]
+		result = integrate(integrand1,p1,p2)
 
 		integrand2(p) = -(s-4*m^2)*(numberF(temp,μ,-ω - Ep(p)) - numberF(temp,μ,-Ep(p)))/(8*π*q*Ep(p)*sqrt(1 - ((s + 2*ω*Ep(p))/(2*p*q))^2)) - (s-4*m^2)*(numberF(temp,μ,-ω + Ep(p)) - numberF(temp,μ,Ep(p)))/(8*π*q*Ep(p)*sqrt(1 - ((s - 2*ω*Ep(p))/(2*p*q))^2))
-		result += hquadrature(integrand2,p2,param.Λ,reltol=1e-2,maxevals=10000)[1]
+		result += integrate(integrand2,p2,param.Λ)
 	end
 
 	return result
@@ -232,16 +232,16 @@ function imagpart_σ_q(temp,μ,ω,q,m,param)
 			p2 = (q + ω*sqrt(1 - 4*m^2/s))/2
 			integrand(p) = (s-4*m^2)*(numberF(temp,μ,-ω + Ep(p)) - numberF(temp,μ,Ep(p)))/(8*π*q*Ep(p)*sqrt(1 - ((s - 2*ω*Ep(p))/(2*p*q))^2))
 
-			result = hquadrature(integrand,p1,p2,reltol=1e-2,maxevals=10000)[1]
+			result = integrate(integrand,p1,p2)
 		end
 	else 
 		p1 = abs(-q + ω*sqrt(1 - 4*m^2/s))/2
 		p2 = (q + ω*sqrt(1 - 4*m^2/s))/2
 		integrand1(p) = -(s-4*m^2)*(numberF(temp,μ,-ω - Ep(p)) - numberF(temp,μ,-Ep(p)))/(8*π*q*Ep(p)*sqrt(1 - ((s + 2*ω*Ep(p))/(2*p*q))^2))
-		result = hquadrature(integrand1,p1,p2,reltol=1e-2,maxevals=10000)[1]
+		result = integrate(integrand1,p1,p2)
 
 		integrand2(p) = -(s-4*m^2)*(numberF(temp,μ,-ω - Ep(p)) - numberF(temp,μ,-Ep(p)))/(8*π*q*Ep(p)*sqrt(1 - ((s + 2*ω*Ep(p))/(2*p*q))^2)) - (s-4*m^2)*(numberF(temp,μ,-ω + Ep(p)) - numberF(temp,μ,Ep(p)))/(8*π*q*Ep(p)*sqrt(1 - ((s - 2*ω*Ep(p))/(2*p*q))^2))
-		result += hquadrature(integrand2,p2,param.Λ,reltol=1e-2,maxevals=10000)[1]
+		result += integrate(integrand2,p2,param.Λ)
 	end
 
 	return result
@@ -257,14 +257,14 @@ function realpart_σ_q(temp, μ, ω, q, param)
 	integrand(ν) = 2*ν*imagpart_σ_q(temp,μ,ν,q,param)*(PrincipalValue(ν^2 - ω^2) - PrincipalValue(ν^2))/π
 	int(ν) = integrand(1/(1 - ν))/(1 - ν)^2
 
-	return hquadrature(integrand,0,1,reltol=1e-2,maxevals=10000)[1]  + hquadrature(int,0,1,reltol=1e-2,maxevals=10000)[1]
+	return integrate(integrand,0,1,reltol=1e-2,maxevals=10000)[1]  + hquadrature(int,0,1)
 end
 
 function realpart_σ_q(temp,μ, ω, q, m, param)
 	integrand(ν) = 2*ν*imagpart_σ_q(temp,μ,ν,q,m,param)*(PrincipalValue(ν^2 - ω^2) - PrincipalValue(ν^2))
 	int(ν) = integrand(1/(1 - ν))/(1 - ν)^2
 
-	return hquadrature(integrand,0,1,reltol=1e-2,maxevals=10000)[1]  + hquadrature(int,0,1,reltol=1e-2,maxevals=10000)[1]
+	return integrate(integrand,0,1,reltol=1e-2,maxevals=10000)[1]  + hquadrature(int,0,1)
 end
 
 @doc raw"""
