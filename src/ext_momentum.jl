@@ -11,6 +11,32 @@
 Returns the imaginary part of the polarisation function at finite external momentum q for the pseudo scalar channel.
 """
 function imagpart_ϕ_q(temp,μ,ω,q,param)
+	m = σ1(temp,μ,param)
+	s = ω^2 - q^2
+	E(p) = sqrt(p^2 + m^2)
+	
+	if ω>=0
+		return nothing
+	else
+		return nothing
+	end
+end
+"""
+A function which evaluates the delta function numerically and used to test the analytical expression used for further numerical calculation above.
+"""
+function imagpart_ϕ_q_test(temp,μ,ω,q,param)
+	m = σ1(temp,μ,param)
+	s = ω^2 - q^2
+	E(p) = sqrt(p^2 + m^2)
+	
+	if ω>=0
+		return nothing
+	else
+		return nothing
+	end
+end
+
+function imagpart_ϕ_q1(temp,μ,ω,q,param)
 	β = 1/temp
 	m = σ1(temp,μ,param)
 	s = ω^2 - q^2
@@ -31,12 +57,12 @@ function imagpart_ϕ_q(temp,μ,ω,q,param)
 		p2 = (q + ω*sqrt(1 - 4*m^2/s))/2
 		integrand1(p) = -s*(numberF(temp,μ,-ω - Ep(p)) - numberF(temp,μ,-Ep(p)))/(8*π*q*Ep(p)*sqrt(1 - ((s + 2*ω*Ep(p))/(2*p*q))^2))
 		result = integrate(integrand1,p1,p2)
-
-		integrand2(p) = -s*(numberF(temp,μ,-ω - Ep(p)) - numberF(temp,μ,-Ep(p)))/(8*π*q*Ep(p)*sqrt(1 - ((s + 2*ω*Ep(p))/(2*p*q))^2)) - s*(numberF(temp,μ,-ω + Ep(p)) - numberF(temp,μ,Ep(p)))/(8*π*q*Ep(p)*sqrt(1 - ((s - 2*ω*Ep(p))/(2*p*q))^2))
-		# int1(p) = integrand2(1/(1 - p))/(1 - p)^2
-
-		result += integrate(integrand2,p2,param.Λ)
 	end
+
+	integrand2(p) = -s*(numberF(temp,μ,-ω - Ep(p)) - numberF(temp,μ,-Ep(p)))/(8*π*q*Ep(p)*sqrt(1 - ((s + 2*ω*Ep(p))/(2*p*q))^2)) - s*(numberF(temp,μ,-ω + Ep(p)) - numberF(temp,μ,Ep(p)))/(8*π*q*Ep(p)*sqrt(1 - ((s - 2*ω*Ep(p))/(2*p*q))^2))
+	# int1(p) = integrand2(1/(1 - p))/(1 - p)^2
+
+	result += integrate(integrand2,p2,param.Λ)
 
 	return result
 end
@@ -82,7 +108,7 @@ function realpart_ϕ_q(temp, μ, ω, q, param)
 	integrand(ν) = 2*ν*imagpart_ϕ_q(temp,μ,ν,q,param)*(PrincipalValue(ν^2 - ω^2) - PrincipalValue(ν^2))/π
 	int1(ν) = integrand(1/(1 - ν))/(1 - ν)^2
 
-	return integrate(integrand,0,1,reltol=1e-2,maxevals=10000)[1]  + hquadrature(int1,0,1)
+	return integrate(integrand,0,1,maxevals=10000)[1]  + integrate(int1,0,1)
 end
 
 function realpart_ϕ_q(temp, μ, ω, q, m, param)
@@ -90,7 +116,7 @@ function realpart_ϕ_q(temp, μ, ω, q, m, param)
 	integrand(ν) = 2*ν*imagpart_ϕ_q(temp,μ,ν,q,m,param)*(PrincipalValue(ν^2 - ω^2) - PrincipalValue(ν^2))/π
 	int1(ν) = integrand(1/(1 - ν))/(1 - ν)^2
 
-	return integrate(integrand,0,1,reltol=1e-2,maxevals=10000)[1]  + hquadrature(int1,0,1)
+	return integrate(integrand,0,1,maxevals=10000)[1]  + integrate(int1,0,1)
 end
 
 @doc raw"""
@@ -257,14 +283,14 @@ function realpart_σ_q(temp, μ, ω, q, param)
 	integrand(ν) = 2*ν*imagpart_σ_q(temp,μ,ν,q,param)*(PrincipalValue(ν^2 - ω^2) - PrincipalValue(ν^2))/π
 	int(ν) = integrand(1/(1 - ν))/(1 - ν)^2
 
-	return integrate(integrand,0,1,reltol=1e-2,maxevals=10000)[1]  + hquadrature(int,0,1)
+	return integrate(integrand,0,1,maxevals=10000)[1]  + integrate(int,0,1)
 end
 
 function realpart_σ_q(temp,μ, ω, q, m, param)
 	integrand(ν) = 2*ν*imagpart_σ_q(temp,μ,ν,q,m,param)*(PrincipalValue(ν^2 - ω^2) - PrincipalValue(ν^2))
 	int(ν) = integrand(1/(1 - ν))/(1 - ν)^2
 
-	return integrate(integrand,0,1,reltol=1e-2,maxevals=10000)[1]  + hquadrature(int,0,1)
+	return integrate(integrand,0,1,maxevals=10000)[1]  + integrate(int,0,1)
 end
 
 @doc raw"""

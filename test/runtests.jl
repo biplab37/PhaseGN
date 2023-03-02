@@ -39,7 +39,7 @@ end
     @test -π <= phasesc_ϕ(rand(),rand(),100*rand(),param) <= 0.0
     @test 0.0 <= phaser_ϕ(rand(),rand(),100*rand(),param) <= π
     @test phase_ϕ(0.1,0.1,0.1,param)[1:2] == [phasesc_ϕ(0.1,0.1,0.1,param), phaser_ϕ(0.1,0.1,0.1,param)]
-    @test phase_ϕ(rand(),rand(),100*rand(),param)[3] >= 0.0
+    @test phase_ϕ(rand(),rand(),100*rand(),Parameters(κ=0.1))[3] >= 0.0
 end
 
 @testset "Pressure" begin
