@@ -39,7 +39,7 @@ function numberF(temp, μ, Energy)
 end
 
 # using QuadGK
-function integrate(func::Function,start, finish;maxevals=100000)
+function integrate(func::Function,start, finish;maxevals=10000)
 	return hquadrature(func,start,finish,reltol=1e-3,maxevals=maxevals)[1]
 	# return quadgk(func,start,finish,rtol=1e-3,maxevals=maxevals)[1]
 end
