@@ -1,7 +1,7 @@
 Base.@kwdef mutable struct Parameters
     # parameters for the model.
     Λ::Float64 = 100.0 # cutoff for the regularisation
-    κ::Float64 = 0.0
+    κ::Float64 = 0.01 # Chiral limit κ->0 has some problem with the regularisation.
     M::Float64 = 1.0
 end
 

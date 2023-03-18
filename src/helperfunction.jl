@@ -18,6 +18,15 @@ function bisection(func::Function, start::Number, finish::Number, iteration::Int
 end
 
 """
+	DiracDelta(input::Float64,δ::Float64 = 1e-3)
+Dirac Delta Function that can be used in a numerical integration.
+"""
+
+function DiracDelta(input, δ = 0.05)
+	return exp(-input^2/(4*δ))/(2*sqrt(pi*δ))
+end
+
+"""
 	PrincipalValue(x::Float64,ϵ::Float64 = 1e-3)
 Useful function in Principle Value Integration.
 """
@@ -39,7 +48,11 @@ function numberF(temp, μ, Energy)
 end
 
 # using QuadGK
-function integrate(func::Function,start, finish;maxevals=10000)
+function integrate(func::Function,start::Number, finish::Number;maxevals=10000)
 	return hquadrature(func,start,finish,reltol=1e-3,maxevals=maxevals)[1]
 	# return quadgk(func,start,finish,rtol=1e-3,maxevals=maxevals)[1]
+end
+
+function integrate(func,start::Vector, finish::Vector;maxevals=100000)
+	return hcubature(func,start,finish,reltol=1e-3,maxevals=maxevals)[1]
 end

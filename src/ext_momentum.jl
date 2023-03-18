@@ -5,7 +5,7 @@
 #-------------------------------------------------------------#
 
 function get_p1_p2(ω,q,m)
-	
+
 	a = (4m^2*ω^2 + q^2*ω^2 - ω^4)/(q^2 - ω^2)
 	if a<0 || a==Inf || a == -Inf
 		return 0.0,0.0
@@ -21,7 +21,7 @@ end
 
 Returns the imaginary part of the polarisation function at finite external momentum q for the pseudo scalar channel.
 """
-function imagpart_ϕ_q(temp,μ,ω,q,param)
+function imagpart_ϕ_q_test(temp,μ,ω,q,param)
 	m = σ1(temp,μ,param)
 	s = ω^2 - q^2
 	E(p) = sqrt(p^2 + m^2)
@@ -36,27 +36,38 @@ function imagpart_ϕ_q(temp,μ,ω,q,param)
 	if ω == 0 || s >= 4(param.Λ^2 + m^2)
 		return 0.0
 	end
-	if s>2*abs(ω)*m
-		if ω>0
-			result = integrate(integrand1,p1,p2)
-		else
-			result = integrate(integrand2,p1,p2)
-		end
-	else
-		result = 0.0
-	end
-	
+	# s0 = min(2*abs(ω)*m,4m^2)
+	# if s>2*abs(ω)*m
+	# 	if ω>0
+	# 		result = integrate(integrand1,p1,p2)
+	# 	else
+	# 		result = integrate(integrand2,p1,p2)
+	# 	end
+	# elseif s<0
+	# 	if ω>0
+	# 		result = integrate(integrand1,p2,param.Λ)
+	# 	else
+	# 		result = integrate(integrand2,p2,param.Λ)
+	# 	end
+	# else
+	# 	result = 0.0
+	# end
+	result = 0.0
 	if ω<0
-		if s>4m^2
+		if s>2*abs(ω)*m
+			result += integrate(integrand2,p1,p2) + integrate(integrand4,p1,p2)
+		elseif s>4m^2
 			result += integrate(integrand4,p1,p2)
 		elseif s<0
-			result += integrate(integrand3,p1,param.Λ) + integrate(itegrand4,p2,param.Λ)
+			result += integrate(integrand2,p2,param.Λ) + integrate(integrand3,p1,param.Λ) + integrate(itegrand4,p2,param.Λ)
 		end
 	elseif ω>0
-		if s>4m^2
+		if s>2*abs(ω)*m
+			result += integrate(integrand1,p1,p2) + integrate(integrand3,p1,p2)
+		elseif s>4m^2
 			result += integrate(integrand3,p1,p2)
 		elseif s<0
-			result += integrate(integrand3,p2,param.Λ) + integrate(integrand4,p1,param.Λ)
+			result += integrate(integrand1,p2,param.Λ) + integrate(integrand3,p2,param.Λ) + integrate(integrand4,p1,param.Λ)
 		end
 	end
 
@@ -65,15 +76,29 @@ end
 """
 A function which evaluates the delta function numerically and used to test the analytical expression used for further numerical calculation above.
 """
-function imagpart_ϕ_q_test(temp,μ,ω,q,param)
+function imagpart_ϕ_q(temp,μ,ω,q,param)
 	m = σ1(temp,μ,param)
 	s = ω^2 - q^2
 	E(p) = sqrt(p^2 + m^2)
+	Ek(p,q,θ) = sqrt(p^2+q^2+2*p*q*cos(θ) + m^2)
 	
-	if ω^2 < param.Λ^2 + m^2
-		
-	else
+	if ω == 0 || s >= 4(param.Λ^2 + m^2)
 		return 0.0
+	end
+	integ1(p,θ) = s*p*(numberF(temp,μ,-Ek(p,q,θ)) - numberF(temp,μ,E(p)))*DiracDelta(ω-E(p)-Ek(p,q,θ),0.2)/(8π*E(p)*Ek(p,q,θ))
+	integ2(p,θ) = s*p*(numberF(temp,μ,Ek(p,q,θ)) - numberF(temp,μ,-E(p)))*DiracDelta(ω+E(p)+Ek(p,q,θ),0.2)/(8π*E(p)*Ek(p,q,θ))
+	integ3(p,θ) = -s*p*(numberF(temp,μ,Ek(p,q,θ)) - numberF(temp,μ,E(p)))*DiracDelta(ω-E(p)+Ek(p,q,θ),0.2)/(8π*E(p)*Ek(p,q,θ))
+	integ4(p,θ) = -s*p*(numberF(temp,μ,-Ek(p,q,θ)) - numberF(temp,μ,-E(p)))*DiracDelta(ω+E(p)-Ek(p,q,θ),0.2)/(8π*E(p)*Ek(p,q,θ))
+
+	integrand1(x) = integ1(x[1],x[2])
+	integrand2(x) = integ2(x[1],x[2])
+	integrand3(x) = integ3(x[1],x[2])
+	integrand4(x) = integ4(x[1],x[2])
+
+	if ω>0
+		result = integrate(integrand1,[0.0,0.0],[param.Λ,2π]) + integrate(integrand3,[0.0,0.0],[param.Λ,2π]) + integrate(integrand4,[0.0,0.0],[param.Λ,2π])
+	else
+		result = integrate(integrand2,[0.0,0.0],[param.Λ,2π]) + integrate(integrand3,[0.0,0.0],[param.Λ,2π]) + integrate(integrand4,[0.0,0.0],[param.Λ,2π])
 	end
 end
 
@@ -149,7 +174,7 @@ function realpart_ϕ_q(temp, μ, ω, q, param)
 	integrand(ν) = 2*ν*imagpart_ϕ_q(temp,μ,ν,q,param)*(PrincipalValue(ν^2 - ω^2) - PrincipalValue(ν^2))/π
 	int1(ν) = integrand(1/(1 - ν))/(1 - ν)^2
 
-	return integrate(integrand,0,1,maxevals=10000)[1]  + integrate(int1,0,1)
+	return integrate(integrand,0,1)[1]  + integrate(int1,0,1)
 end
 
 function realpart_ϕ_q(temp, μ, ω, q, m, param)
@@ -157,7 +182,7 @@ function realpart_ϕ_q(temp, μ, ω, q, m, param)
 	integrand(ν) = 2*ν*imagpart_ϕ_q(temp,μ,ν,q,m,param)*(PrincipalValue(ν^2 - ω^2) - PrincipalValue(ν^2))/π
 	int1(ν) = integrand(1/(1 - ν))/(1 - ν)^2
 
-	return integrate(integrand,0,1,maxevals=10000)[1]  + integrate(int1,0,1)
+	return integrate(integrand,0,1)[1]  + integrate(int1,0,1)
 end
 
 @doc raw"""
