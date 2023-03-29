@@ -21,7 +21,7 @@ end
 
 function σ1(temp,μ)
     param = Parameters()
-    @warn("No parameters given, using default parameters: κ = 0.0, M = 1.0")
+    @warn("No parameters given, using default parameters: κ = $(param.κ), M = $(param.M)")
     β = 1/temp
 	
 	## The gap equation
@@ -61,7 +61,7 @@ end
 
 Returns the exciton mass of scalar channels σ₁ and σ₂
 """
-function M_σ(temp,μ,param::Parameters)
+function M_sigma(temp,μ,param::Parameters)
     m = σ1(temp,μ,param)
     func(ME) = ME^2 - 4*m^2 - param.κ*gE2(temp,μ,ME,param)/m
     result = bisection(func,0.0,5)
@@ -77,7 +77,7 @@ end
 
 Returns the exciton mass of scalar channels ϕ₁ and ϕ₂
 """
-function M_ϕ(temp,μ,param::Parameters)
+function M_phi(temp,μ,param::Parameters)
     m = σ1(temp,μ,param)
     func(ME) = ME^2 - param.κ*gE2(temp,μ,ME,param)/m
     result = bisection(func,0.0,5)
@@ -88,4 +88,4 @@ function M_ϕ(temp,μ,param::Parameters)
     end
 end
 
-export σ1, M_ϕ, M_σ
+export σ1, M_phi, M_sigma

@@ -2,7 +2,7 @@
 
 function realpartI2(temp,μ,param)
     m = σ1(temp,μ,param)
-    M = M_ϕ(temp,μ,param)
+    M = M_phi(temp,μ,param)
     Ep(p) = sqrt(p^2+m^2)
     integrand(p) = p*(1 - numberF(temp,-μ,Ep(p)) - numberF(temp,μ,Ep(p)))*(PrincipalValue(2*Ep(p) - M,1e-3) + 1/(M + 2*Ep(p)))/(8*π*Ep(p)^2)
     return integrate(integrand,0.0,param.Λ)
@@ -10,7 +10,7 @@ end
 
 function imagpartI2(temp, μ,param)
     m = σ1(temp,μ,param)
-    M = M_ϕ(temp,μ,param)
+    M = M_phi(temp,μ,param)
     Nσ = M^2 - 4*m^2
     if Nσ > 0 && abs(M) < 2*sqrt(param.Λ^2 + m^2)
         return (1 - numberF(temp,-μ,M/2) - numberF(temp,μ,M/2))/(8*M)
@@ -27,7 +27,7 @@ function I1(temp,μ,param)
 end
 
 function Γϕ(temp,μ,param)
-    M = M_ϕ(temp,μ,param)
+    M = M_phi(temp,μ,param)
     imp = imagpartI2(temp,μ,param)
     rep = realpartI2(temp,μ,param)
     i1 = I1(temp,μ,param)
@@ -38,7 +38,7 @@ end
 
 function Γϕ2(temp,μ,param)
 	m = σ1(temp,μ,param)
-    M = M_ϕ(temp,μ,param)
+    M = M_phi(temp,μ,param)
     imp = imagpartI2(temp,μ,param)
     rep = realpartI2(temp,μ,param)
     i1 = I1(temp,μ,param)
@@ -54,7 +54,7 @@ end
 function phaseBW_ϕ(temp,μ,ω,param)
 	Γ = Γϕ(temp,μ,param)
 	m = σ1(temp,μ,param)
-	M = M_ϕ(temp,μ,param)
+	M = M_phi(temp,μ,param)
 	if 2*m >= M
 		if ω<= 2*m
 			return 0.0
@@ -81,7 +81,7 @@ end
 function Γ_ϕ(temp,μ,param)
 	dω = 1e-2
 
-	ωX = M_ϕ(temp,μ,param)
+	ωX = M_phi(temp,μ,param)
 	m = σ1(temp,μ,param)
 
 	impi = imagpart_ϕ(temp,μ,ωX,m,param)
