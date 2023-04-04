@@ -5,17 +5,17 @@ This module contains many of the functions related to the calculation of various
 """
 module PhaseGN
 
-using Cubature, PolyLog
+    using Cubature, PolyLog, UsefulFunctions
 
-include("parameters.jl")
-include("helperfunction.jl")
-include("masses.jl")
-include("meanfield.jl")
-include("sigma.jl")
-include("phi.jl")
-include("pressure.jl")
-include("width.jl")
-include("ext_momentum.jl")
-include("structure_factor.jl")
+    include("parameters.jl")
+    include("helperfunction.jl")
+    include("masses.jl")
+    include("meanfield.jl")
+    include("sigma.jl")
+    include("phi.jl")
+    include("pressure.jl")
+    include("width.jl")
+    include("ext_momentum.jl")
+    include("structure_factor.jl")
 
 end
