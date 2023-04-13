@@ -1,9 +1,9 @@
 """
-	imagpart_ϕ(temp, μ, ω,param)
+	imagpart_phi(temp, μ, ω,param)
 
 Returns the imaginary part of the polarisation for ϕ₁ and ϕ₂ at zero external momentum.
 """
-function imagpart_ϕ(temp, μ, ω,param)
+function imagpart_phi(temp, μ, ω,param)
 	m = σ1(temp,μ,param)
 	Nσ = ω^2 - 4*m^2
 	if Nσ > 0 && abs(ω) < 2*sqrt(param.Λ^2 + m^2)
@@ -12,7 +12,7 @@ function imagpart_ϕ(temp, μ, ω,param)
 		return 0.0
 	end
 end
-function imagpart_ϕ(temp, μ, ω,m,param)
+function imagpart_phi(temp, μ, ω,m,param)
 	Nσ = ω^2 - 4*m^2
 	if Nσ > 0 && abs(ω) < 2*sqrt(param.Λ^2 + m^2)
 		return ω*(1 - numberF(temp,-μ,ω/2) - numberF(temp,μ,ω/2))/(4)
@@ -22,40 +22,40 @@ function imagpart_ϕ(temp, μ, ω,m,param)
 end
 
 """
-	realpart_ϕ(temp, μ, ω,param)
+	realpart_phi(temp, μ, ω,param)
 
 Returns the real part of the polarisation for ϕ₁ and ϕ₂ at zero external momentum.
 """
-function realpart_ϕ(temp,μ,ω,param)
+function realpart_phi(temp,μ,ω,param)
 	m = σ1(temp,μ,param)
 	Ep(p) = sqrt(p^2+m^2)
 	integrand(p) = - p*(1)*(1 - numberF(temp,-μ,Ep(p)) - numberF(temp,μ,Ep(p)))*(PrincipalValue(ω - 2*Ep(p)) - PrincipalValue(ω + 2*Ep(p)) + PrincipalValue(Ep(p)))/π
     return integrate(integrand,0.0,param.Λ)
 end
-function realpart_ϕ(temp,μ,ω,m,param)
+function realpart_phi(temp,μ,ω,m,param)
 	Ep(p) = sqrt(p^2+m^2)
 	integrand(p) = - p*(1)*(1 - numberF(temp,-μ,Ep(p)) - numberF(temp,μ,Ep(p)))*(PrincipalValue(ω - 2*Ep(p)) - PrincipalValue(ω + 2*Ep(p)) + PrincipalValue(Ep(p)))/π
     return integrate(integrand,0.0,param.Λ)
 end
 
-function fullrealpart_ϕ(temp,μ,ω,param)
+function fullrealpart_phi(temp,μ,ω,param)
 	m = σ1(temp,μ,param)
 	Ep(p) = sqrt(p^2+m^2)
 	integrand(p) = 1/π + p*(1)*(1 - numberF(temp,-μ,Ep(p)) - numberF(temp,μ,Ep(p)))*(PrincipalValue(ω - 2*Ep(p)) - PrincipalValue(ω + 2*Ep(p)))/π
     return  -1/π + integrate(integrand,0.0,param.Λ)
 end
-function fullrealpart_ϕ(temp,μ,ω,m,param)
+function fullrealpart_phi(temp,μ,ω,m,param)
 	Ep(p) = sqrt(p^2+m^2)
 	integrand(p) = 1/π + p*(1)*(1 - numberF(temp,-μ,Ep(p)) - numberF(temp,μ,Ep(p)))*(PrincipalValue(ω - 2*Ep(p)) - PrincipalValue(ω + 2*Ep(p)))/π
     return  -1/π + integrate(integrand,0.0,param.Λ)
 end
 
 """
-	Π0_ϕ(temp,μ,param)
+	Π0_phi(temp,μ,param)
 
 Returns the momentum and frequency independent part of the polarisation function
 """
-function Π0_ϕ(temp,μ,param)
+function Π0_phi(temp,μ,param)
 	m = σ1(temp,μ,param)
 	Ep(p) = sqrt(p^2+m^2)
 	integrand(p) = 1/π - p*(1)*(1 - numberF(temp,-μ,Ep(p)) - numberF(temp,μ,Ep(p)))/(π*Ep(p))
@@ -63,76 +63,76 @@ function Π0_ϕ(temp,μ,param)
 end
 
 @doc raw"""
-	phasesc_ϕ(temp,μ,ω,param)
+	phasesc_phi(temp,μ,ω,param)
 
 Returns the scattering part of the phase for ϕ₁ and ϕ₂ at zero external momentum.
 
 Also consider the equivalent function 
 
-	phasesc_ϕ(temp,μ,ω,m,param)
+	phasesc_phi(temp,μ,ω,m,param)
 
 where you supply the values of $\bar{\sigma}_1 = m$. Since these values only depend 
 on the temp and μ, this function is more efficient if you want to calculate phases 
 at different vaules of frequencies at a fixed temp and μ.
 """
-function phasesc_ϕ(temp,μ,ω,param)
-	repi = realpart_ϕ(temp,μ,ω,param)
-	impi = imagpart_ϕ(temp,μ,ω,param)
+function phasesc_phi(temp,μ,ω,param)
+	repi = realpart_phi(temp,μ,ω,param)
+	impi = imagpart_phi(temp,μ,ω,param)
 	return -angle(Complex(repi,impi))
 end
-function phasesc_ϕ(temp,μ,ω,m,param)
-	repi = realpart_ϕ(temp,μ,ω,m,param)
-	impi = imagpart_ϕ(temp,μ,ω,m,param)
+function phasesc_phi(temp,μ,ω,m,param)
+	repi = realpart_phi(temp,μ,ω,m,param)
+	impi = imagpart_phi(temp,μ,ω,m,param)
 	return -angle(Complex(repi,impi))
 end
 
 @doc raw"""
-	phaser_ϕ(temp,μ,ω,param)
+	phaser_phi(temp,μ,ω,param)
 
 Returns the resonant part of the phase for ϕ₁ and ϕ₂ at zero external momentum.
 
 Also consider the equivalent function 
 
-	phaser_ϕ(temp,μ,ω,m,Π00,param)
+	phaser_phi(temp,μ,ω,m,Π00,param)
 
 where you supply the values of $\bar{\sigma}_1 = m$ and $\Pi 00$ the frequency 
 and momentum independent part of the polarisation. Since these values only depend 
 on the temp and μ, this function is more efficient if you want to calculate phases
 at different vaules of frequencies at a fixed temp and μ.
 """
-function phaser_ϕ(temp,μ,ω,param)
-    repi = realpart_ϕ(temp,μ,ω,param)
-	impi = imagpart_ϕ(temp,μ,ω,param)
-	Π00 = Π0_ϕ(temp,μ,param)
+function phaser_phi(temp,μ,ω,param)
+    repi = realpart_phi(temp,μ,ω,param)
+	impi = imagpart_phi(temp,μ,ω,param)
+	Π00 = Π0_phi(temp,μ,param)
 
 	return -angle(Complex(repi - (repi^2 + impi^2)/Π00,-impi))
 end
-function phaser_ϕ(temp,μ,ω,m,Π00,param)
-    repi = realpart_ϕ(temp,μ,ω,m,param)
-	impi = imagpart_ϕ(temp,μ,ω,m,param)
+function phaser_phi(temp,μ,ω,m,Π00,param)
+    repi = realpart_phi(temp,μ,ω,m,param)
+	impi = imagpart_phi(temp,μ,ω,m,param)
 
 	return -angle(Complex(repi - (repi^2 + impi^2)/Π00,-impi))
 end
 
 @doc raw"""
-	phase_ϕ(temp,μ,ω,param)
+	phase_phi(temp,μ,ω,param)
 
 Returns all the phases in an array 
 	[scattered phase, resonant phase, total phase]
 
 Also consider the equivalent function 
 
-	phase_ϕ(temp,μ,ω,m,Π00,param)
+	phase_phi(temp,μ,ω,m,Π00,param)
 
 where you supply the values of $\bar{\sigma}_1 = m$ and $\Pi 00$ the frequency
 and momentum independent part of the polarisation. Since these values only depend 
 on the temp and μ, this function is more efficient if you want to calculate phases 
 at different vaules of frequencies at a fixed temp and μ.
 """
-function phase_ϕ(temp,μ,ω,param)
-    repi = realpart_ϕ(temp,μ,ω,param)
-	impi = imagpart_ϕ(temp,μ,ω,param)
-	Π00 = Π0_ϕ(temp,μ,param)
+function phase_phi(temp,μ,ω,param)
+    repi = realpart_phi(temp,μ,ω,param)
+	impi = imagpart_phi(temp,μ,ω,param)
+	Π00 = Π0_phi(temp,μ,param)
 
 	phasesc = -angle(Complex(repi,impi))
 	phaser = -angle(Complex(repi - (repi^2 + impi^2)/Π00,-impi))
@@ -140,9 +140,9 @@ function phase_ϕ(temp,μ,ω,param)
 	return [phasesc, phaser, phasesc + phaser]
 end
 
-function phase_ϕ(temp,μ,ω,m,Π00,param)
-    repi = realpart_ϕ(temp,μ,ω,m,param)
-	impi = imagpart_ϕ(temp,μ,ω,m,param)
+function phase_phi(temp,μ,ω,m,Π00,param)
+    repi = realpart_phi(temp,μ,ω,m,param)
+	impi = imagpart_phi(temp,μ,ω,m,param)
 
 	phasesc = -angle(Complex(repi,impi))
 	phaser = -angle(Complex(repi - (repi^2 + impi^2)/Π00,-impi))
@@ -150,4 +150,4 @@ function phase_ϕ(temp,μ,ω,m,Π00,param)
 	return [phasesc, phaser, phasesc + phaser]
 end
 
-export imagpart_ϕ, realpart_ϕ, fullrealpart_ϕ, phasesc_ϕ, phaser_ϕ, phase_ϕ, Π0_ϕ
+export imagpart_phi, realpart_phi, fullrealpart_phi, phasesc_phi, phaser_phi, phase_phi, Π0_phi

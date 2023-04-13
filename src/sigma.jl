@@ -120,7 +120,7 @@ function phaser_σ(temp,μ,ω,m,Π00,param)
 end
 
 @doc raw"""
-	phase_σ(temp,μ,ω,param)
+	phase_sigma(temp,μ,ω,param)
 
 Returns all the phases in an array 
 
@@ -128,14 +128,14 @@ Returns all the phases in an array
 
 Also consider the equivalent function 
 
-    phase_σ(temp,μ,ω,m,Π00,param)
+    phase_sigma(temp,μ,ω,m,Π00,param)
 
 where you supply the values of $\bar{\sigma}_1 = m$ and $\Pi 00$ the frequency
 and momentum independent part of the polarisation. Since these values only depend 
 on the temp and μ, this function is more efficient if you want to calculate phases 
 at different vaules of frequencies at a fixed temp and μ.
 """
-function phase_σ(temp,μ,ω,param)
+function phase_sigma(temp,μ,ω,param)
     repi = realpart_σ(temp,μ,ω,param)
     impi = imagpart_σ(temp,μ,ω,param)
     Π00 = Π0_σ(temp,μ,param)
@@ -146,7 +146,7 @@ function phase_σ(temp,μ,ω,param)
     return [phasesc, phaser, phasesc + phaser]
 end
 
-function phase_σ(temp,μ,ω,m,Π00,param)
+function phase_sigma(temp,μ,ω,m,Π00,param)
     repi = realpart_σ(temp,μ,ω,m,param)
     impi = imagpart_σ(temp,μ,ω,m,param)
 
@@ -156,4 +156,4 @@ function phase_σ(temp,μ,ω,m,Π00,param)
     return [phasesc, phaser, phasesc + phaser]
 end
 
-export imagpart_σ, realpart_σ, fullrealpart_σ, phasesc_σ, phaser_σ, phase_σ,Π0_σ
+export imagpart_σ, realpart_σ, fullrealpart_σ, phasesc_σ, phaser_σ, phase_sigma,Π0_σ
