@@ -20,7 +20,7 @@ using PhaseGN
 
 p = Parameters()
 
-phase_ϕ(temp,μ,ω,p)
+phase_phi(temp,μ,ω,p)
 ```
 
 For more detailed examples see the documentation.
