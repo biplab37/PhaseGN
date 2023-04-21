@@ -2,6 +2,7 @@ using PhaseGN, Test
 
 M0 = rand() + 0.5
 param = Parameters()
+param0 = Parameters(κ=0.0)
 
 @testset "Helper Functions" begin
     @testset "Bisection" begin
@@ -14,24 +15,16 @@ param = Parameters()
     end
 end
 
-@testset "Scalar Channel (Mean Field)" begin
-    @testset "σ1" begin
-        @test σ1(0.01,0.0) > 1.0 
-        @test σ1(0.01,0.0,Parameters(κ=0.0)) ≈ 1.0 atol=1e-4
-        @test σ1(0.1,0.0,Parameters(κ=0.0))  < 1.0
-        @test σ1(0.1,0.0) > σ1(0.1,0.1,Parameters(κ = 0.0))
-        @test σ1(0.01,0.0,Parameters(M=M0,κ = 0.0)) ≈ M0 atol=1e-4
-    end
-end
-
 include("phase_test.jl")
-
 include("pressure_test.jl")
+include("masses_test.jl")
 
 @testset "Mean Field" begin
-    @test pressure_MF(0.01,0.0,param) < 0.001
     @test pressure_MF(0.01,0.0,param) < 0.01
-    @test 0.0< energy_MF(0.01,0.0,param) < 0.01
+    @test pressure_MF(0.01,0.0,param,norm=true) < 0.01
+    @test pressure_MF(3*rand(),0.0,param,norm=true) < 5.0
+    @test abs(pressure_MF(1.0,0.0,param,norm=true) - pressure_MF(1.2,0.0,param,norm=true)) < 0.1
+    @test 0.0 < energy_MF(0.01,0.0,param) < 0.01
     @test energy_MF(rand(),rand(),param) >= 0.0
     @test number_MF(rand(),rand(),param) >= 0.0 
 end

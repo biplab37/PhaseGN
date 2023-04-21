@@ -57,7 +57,7 @@ function gE2(temp,μ,ME,param::Parameters)
 end
 
 """
-	M_σ(temp,μ,κ)
+	M_σ(temp,μ,param::Parameters)
 
 Returns the exciton mass of scalar channels σ₁ and σ₂
 """
@@ -73,7 +73,7 @@ function M_sigma(temp,μ,param::Parameters)
 end
 
 """
-	M_ϕ(temp,μ,κ)
+	M_ϕ(temp,μ,param::Parameters)
 
 Returns the exciton mass of scalar channels ϕ₁ and ϕ₂
 """
