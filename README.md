@@ -2,7 +2,7 @@
 
 [![codecov](https://codecov.io/gh/biplab37/PhaseGN/branch/main/graph/badge.svg?token=LZ1YO7D35E)](https://codecov.io/gh/biplab37/PhaseGN)
 
-A Package to calculate the phase and realted quantities for $2+1$ dimensional Gross-Neveu Model.
+A Package to calculate the phase and related quantities for $2+1$ dimensional Gross-Neveu Model.
 
 ## Installation
 In the Julia REPL

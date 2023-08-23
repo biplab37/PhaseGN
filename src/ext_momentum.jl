@@ -76,7 +76,7 @@ end
 """
 A function which evaluates the delta function numerically and used to test the analytical expression used for further numerical calculation above.
 """
-function imagpart_ϕ_q(temp, μ, ω, q, param)
+function imagpart_ϕ_q2(temp, μ, ω, q, param)
     m = σ1(temp, μ, param)
     s = ω^2 - q^2
     E(p) = sqrt(p^2 + m^2)
@@ -133,7 +133,7 @@ function imagpart_ϕ_q1(temp, μ, ω, q, param)
     return result
 end
 
-function imagpart_ϕ_q(temp, μ, ω, q, m, param)
+function imagpart_ϕ_q2(temp, μ, ω, q, m, param)
     β = 1 / temp
     s = ω^2 - q^2
     Ep(p) = sqrt(p^2 + m^2)
@@ -163,13 +163,39 @@ function imagpart_ϕ_q(temp, μ, ω, q, m, param)
     return result
 end
 
+function imagpart_ϕ_q(temp, μ, ω, q, param)
+    β = 1/temp
+    m = σ1(temp, μ, param)
+    s = ω^2 - q^2
+
+    integrand1(x) = (numberF(temp, μ, (x - ω)/2.0) - numberF(temp, μ, (ω + x)/2.0))/sqrt(((ω + x)^2 - 4m^2)*q^2 - ω^2*x^2 - 2*ω*x*q^2 - q^4)
+    integrand2(x) = (numberF(temp, μ, (-x - ω)/2.0) - numberF(temp, μ, (ω - x)/2.0))/sqrt(((-ω + x)^2 - 4m^2)*q^2 - ω^2*x^2 + 2*ω*x*q^2 - q^4)
+    integrand3(x) = (numberF(temp, μ, (x - ω)/2.0) - numberF(temp, μ, (ω + x)/2.0))/sqrt(((ω + x)^2 - 4m^2)*q^2 - ω^2*x^2 - 2*ω*x*q^2 - q^4)
+    integrand4(x) = (numberF(temp, μ, (-x - ω)/2.0) - numberF(temp, μ, (ω - x)/2.0))/sqrt(((-ω + x)^2 - 4m^2)*q^2 - ω^2*x^2 + 2*ω*x*q^2 - q^4)
+
+    if 0<=s<=4m^2
+        return 0.0
+    else
+        y = ω*sqrt(1 - 4*m^2/s)/2.0
+        if s<0.0
+            return -s*(integrate(integrand3, y, Inf) + integrate(integrand4,y,Inf))/8π
+        else
+            if ω>0.0
+                return s*(integrate(integrand1, -y, y))/8π
+            else
+                return s*(integrate(integrand2, -y, y))/8π
+            end
+        end  
+    end
+end
+
 """
 	realpart_ϕ_q(temp, μ, ω, q, param)
 
 Returns the real part of the polarisation function at finite external momentum for the pseudo scalar channel.
 Uses `imagpart_ϕ_q` and Kramer-Cronig Relation for the calculation
 """
-function realpart_ϕ_q(temp, μ, ω, q, param)
+function realpart_ϕ_q(nemp, μ, ω, q, param)
 
     integrand(ν) = 2 * ν * imagpart_ϕ_q(temp, μ, ν, q, param) * (PrincipalValue(ν^2 - ω^2) - PrincipalValue(ν^2)) / π
     int1(ν) = integrand(1 / (1 - ν)) / (1 - ν)^2
