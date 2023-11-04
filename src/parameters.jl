@@ -16,8 +16,6 @@ function Base.show(io::IO, ::MIME"text/plain", p::Parameters)
     println(io, "M = ", p.M)
 end
 
-function default_parameters()
-    p = Parameters()
-end
+default_parameters() = Parameters()
 
 export Parameters, default_parameters

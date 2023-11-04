@@ -3,38 +3,49 @@
 
 Returns the value of $\bar{\sigma}_1$ by solving the gap equation.
 """
-function σ1(temp, μ, param::Parameters)
+function σ1(temp::Float64, μ, param::Parameters; guess=0.5)
     β = 1 / temp
 
     ## The gap equation
     σ₁(σ) = (1 + 2 * cosh(β * μ) * exp(-β * σ) + exp(-2 * β * σ) - exp(β * (param.M - σ + (π * param.κ / σ))))
 
-    result = bisection(σ₁, 1e-4, 4)
+    # result = bisection(σ₁, 1e-4, 4)
+    #
+    # ## For the case when there is no zero in the interval
+    # if (4.0 - result < 1e-3 || result == 1e-4)
+    #     result = 0.0
+    # end
 
-    ## For the case when there is no zero in the interval
-    if (4.0 - result < 1e-3 || result == 1e-4)
-        result = 0.0
-    end
-
-    return result
+    return fzero(σ₁, guess)
 end
 
-function σ1(temp, μ)
+function σ1(temp, μ; guess=0.5)
     param = Parameters()
     @warn("No parameters given, using default parameters: κ = $(param.κ), M = $(param.M)")
-    β = 1 / temp
+    σ1(temp, μ, param, guess=guess)
+end
+
+function σ1(trange::AbstractRange, μ, param::Parameters; guess=0.5)
+    σlist = zeros(length(trange))
 
     ## The gap equation
-    σ₁(σ) = (1 + 2 * cosh(β * μ) * exp(-β * σ) + exp(-2 * β * σ) - exp(β * (param.M - σ + (π * param.κ / σ))))
+    σ₁(β, σ) = (1 + 2 * cosh(β * μ) * exp(-β * σ) + exp(-2 * β * σ) - exp(β * (param.M - σ + (π * param.κ / σ))))
 
-    result = bisection(σ₁, 1e-4, 4)
-
-    ## For the case when there is no zero in the interval
-    if (4.0 - result < 1e-3 || result == 1e-4)
-        result = 0.0
+    for (i, t) in enumerate(trange)
+        guess = fzero(σ -> σ₁(1 / t, σ), guess)
+        σlist[i] = guess
     end
 
-    return result
+    return σlist
+end
+
+function critical_line(t::Number, param::Parameters)
+    determinant = (exp(param.M / t) - 2)^2 - 4.0
+    if determinant > 0.0
+        return t * log(((exp(param.M / t) - 2) + sqrt(determinant)) / 2)
+    else
+        return 0.0
+    end
 end
 
 

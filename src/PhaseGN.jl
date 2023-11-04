@@ -6,6 +6,7 @@ This module contains many of the functions related to the calculation of various
 module PhaseGN
 
 using Cubature, PolyLog
+using NLsolve: nlsolve
 
 include("parameters.jl")
 include("helperfunction.jl")

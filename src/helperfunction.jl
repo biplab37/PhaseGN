@@ -56,3 +56,7 @@ end
 function integrate(func, start::Vector, finish::Vector; maxevals=100000)
     return hcubature(func, start, finish, reltol=1e-3, maxevals=maxevals)[1]
 end
+
+function fzero(func::Function, guess)
+    return nlsolve(x -> func(x...), [guess]).zero
+end

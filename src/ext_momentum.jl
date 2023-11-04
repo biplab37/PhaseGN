@@ -32,7 +32,7 @@ function imagpart_ϕ_q_test(temp, μ, ω, q, param)
     integrand3(p) = -s * (numberF(temp, μ, -ω + E(p)) - numberF(temp, μ, E(p))) / (8 * π * q * E(p) * sqrt(1 - ((s - 2 * ω * E(p)) / (2 * p * q))^2))
     integrand4(p) = -s * (numberF(temp, μ, -ω - E(p)) - numberF(temp, μ, -E(p))) / (8 * π * q * E(p) * sqrt(1 - ((s + 2 * ω * E(p)) / (2 * p * q))^2))
 
-    ## TODO - Logic below can be improved
+    ## TODO: - Logic below can be improved
     if ω == 0 || s >= 4(param.Λ^2 + m^2)
         return 0.0
     end
@@ -59,7 +59,7 @@ function imagpart_ϕ_q_test(temp, μ, ω, q, param)
         elseif s > 4m^2
             result += integrate(integrand4, p1, p2)
         elseif s < 0
-            result += integrate(integrand2, p2, param.Λ) + integrate(integrand3, p1, param.Λ) + integrate(itegrand4, p2, param.Λ)
+            result += integrate(integrand2, p2, param.Λ) + integrate(integrand3, p1, param.Λ) + integrate(integrand4, p2, param.Λ)
         end
     elseif ω > 0
         if s > 2 * abs(ω) * m
@@ -164,28 +164,28 @@ function imagpart_ϕ_q2(temp, μ, ω, q, m, param)
 end
 
 function imagpart_ϕ_q(temp, μ, ω, q, param)
-    β = 1/temp
+    β = 1 / temp
     m = σ1(temp, μ, param)
     s = ω^2 - q^2
 
-    integrand1(x) = (numberF(temp, μ, (x - ω)/2.0) - numberF(temp, μ, (ω + x)/2.0))/sqrt(((ω + x)^2 - 4m^2)*q^2 - ω^2*x^2 - 2*ω*x*q^2 - q^4)
-    integrand2(x) = (numberF(temp, μ, (-x - ω)/2.0) - numberF(temp, μ, (ω - x)/2.0))/sqrt(((-ω + x)^2 - 4m^2)*q^2 - ω^2*x^2 + 2*ω*x*q^2 - q^4)
-    integrand3(x) = (numberF(temp, μ, (x - ω)/2.0) - numberF(temp, μ, (ω + x)/2.0))/sqrt(((ω + x)^2 - 4m^2)*q^2 - ω^2*x^2 - 2*ω*x*q^2 - q^4)
-    integrand4(x) = (numberF(temp, μ, (-x - ω)/2.0) - numberF(temp, μ, (ω - x)/2.0))/sqrt(((-ω + x)^2 - 4m^2)*q^2 - ω^2*x^2 + 2*ω*x*q^2 - q^4)
+    integrand1(x) = (numberF(temp, μ, (x - ω) / 2.0) - numberF(temp, μ, (ω + x) / 2.0)) / sqrt(((ω + x)^2 - 4m^2) * q^2 - ω^2 * x^2 - 2 * ω * x * q^2 - q^4)
+    integrand2(x) = (numberF(temp, μ, (-x - ω) / 2.0) - numberF(temp, μ, (ω - x) / 2.0)) / sqrt(((-ω + x)^2 - 4m^2) * q^2 - ω^2 * x^2 + 2 * ω * x * q^2 - q^4)
+    integrand3(x) = (numberF(temp, μ, (x - ω) / 2.0) - numberF(temp, μ, (ω + x) / 2.0)) / sqrt(((ω + x)^2 - 4m^2) * q^2 - ω^2 * x^2 - 2 * ω * x * q^2 - q^4)
+    integrand4(x) = (numberF(temp, μ, (-x - ω) / 2.0) - numberF(temp, μ, (ω - x) / 2.0)) / sqrt(((-ω + x)^2 - 4m^2) * q^2 - ω^2 * x^2 + 2 * ω * x * q^2 - q^4)
 
-    if 0<=s<=4m^2
+    if 0 <= s <= 4m^2
         return 0.0
     else
-        y = ω*sqrt(1 - 4*m^2/s)/2.0
-        if s<0.0
-            return -s*(integrate(integrand3, y, Inf) + integrate(integrand4,y,Inf))/8π
+        y = ω * sqrt(1 - 4 * m^2 / s) / 2.0
+        if s < 0.0
+            return -s * (integrate(integrand3, y, Inf) + integrate(integrand4, y, Inf)) / 8π
         else
-            if ω>0.0
-                return s*(integrate(integrand1, -y, y))/8π
+            if ω > 0.0
+                return s * (integrate(integrand1, -y, y)) / 8π
             else
-                return s*(integrate(integrand2, -y, y))/8π
+                return s * (integrate(integrand2, -y, y)) / 8π
             end
-        end  
+        end
     end
 end
 
@@ -195,7 +195,7 @@ end
 Returns the real part of the polarisation function at finite external momentum for the pseudo scalar channel.
 Uses `imagpart_ϕ_q` and Kramer-Cronig Relation for the calculation
 """
-function realpart_ϕ_q(nemp, μ, ω, q, param)
+function realpart_ϕ_q(temp, μ, ω, q, param)
 
     integrand(ν) = 2 * ν * imagpart_ϕ_q(temp, μ, ν, q, param) * (PrincipalValue(ν^2 - ω^2) - PrincipalValue(ν^2)) / π
     int1(ν) = integrand(1 / (1 - ν)) / (1 - ν)^2
@@ -301,9 +301,9 @@ function phase_ϕ_q(temp, μ, ω, q, m, Π00, param)
     return [phasesc, phaser, phasesc + phaser]
 end
 
-#-------------------------------------------------------------#
-#|                         Scalar(σ)                         |#
-#-------------------------------------------------------------#
+#          ╭──────────────────────────────────────────────────────────╮
+#          │                        Scalar(σ)                         │
+#          ╰──────────────────────────────────────────────────────────╯
 
 """
 	imagpart_σ_q(temp, μ, ω,param)

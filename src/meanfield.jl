@@ -29,7 +29,6 @@ end
 function number_MF(temp, μ, param::Parameters; norm=false::Bool)
     σ = σ1(temp, μ, param)
     β = 1 / temp
-    M = σ1(0.01, μ, param)
     number = temp * (β * σ * (log(1 + exp(-β * (σ - μ))) - log(1 + exp(-β * (σ + μ)))) - reli2(-exp(-β * (σ - μ))) + reli2(-exp(-β * (σ + μ)))) / (π)
 
     if norm
