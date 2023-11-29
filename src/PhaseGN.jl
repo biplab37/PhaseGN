@@ -5,6 +5,7 @@ This module contains many of the functions related to the calculation of various
 """
 module PhaseGN
 
+using UsefulFunctions: PVintegral
 using Cubature, PolyLog
 using NLsolve: nlsolve
 

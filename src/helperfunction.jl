@@ -58,5 +58,6 @@ function integrate(func, start::Vector, finish::Vector; maxevals=100000)
 end
 
 function fzero(func::Function, guess)
-    return nlsolve(x -> func(x...), [guess]).zero
+    return nlsolve(x -> func(x...), [guess]).zero[1]
 end
+
