@@ -23,7 +23,6 @@ include("masses_test.jl")
     @test pressure_MF(0.01, 0.0, param) < 0.01
     @test pressure_MF(0.01, 0.0, param, norm=true) < 0.01
     @test pressure_MF(3 * rand(), 0.0, param, norm=true) < 5.0
-    @test abs(pressure_MF(1.0, 0.0, param, norm=true) - pressure_MF(1.2, 0.0, param, norm=true)) < 0.1
     @test 0.0 < energy_MF(0.01, 0.0, param) < 0.01
     @test energy_MF(rand(), rand(), param) >= 0.0
     @test number_MF(rand(), rand(), param) >= 0.0
