@@ -19,5 +19,7 @@ include("pressure.jl")
 include("width.jl")
 include("ext_momentum.jl")
 include("structure_factor.jl")
+include("plasmon.jl")
 
 end
+
