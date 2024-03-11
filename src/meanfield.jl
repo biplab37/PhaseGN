@@ -2,15 +2,22 @@
 
 function pressure_MF(temp, μ, param::Parameters; norm=false::Bool)
     σ₁ = σ1(temp, μ, param)
-    M = σ1(0.01, μ, param)
-    temp_independent = M * σ₁^2 / 2π - σ₁^3 / 3π - M^3 / 6π
+    M = param.M
+    temp_independent = (M * σ₁^2 / 2π) - (σ₁^3 / 3π) - (M^3 / 6π)
     temp_dependent = -temp^3 * (σ₁ * (reli2(-exp(-(σ₁ - μ) / temp)) + reli2(-exp(-(σ₁ + μ) / temp))) / temp + reli3(-exp(-(σ₁ - μ) / temp)) + reli3(-exp(-(σ₁ + μ) / temp))) / π
-
     if norm
         return (temp_independent + temp_dependent) / temp^3
     else
         return temp_independent + temp_dependent
     end
+end
+
+#TODO: finish the implementation of the mean field approximation at zero chemical potential
+function pressure_MF(temp, param::Parameters; norm=false::Bool)
+    σ₁ = σ1(temp, μ, param)
+    M = param.M
+    T_c = param.M / (2 * log(2))
+    return nothing
 end
 
 function energy_MF(temp, μ, param::Parameters; norm=false::Bool)
