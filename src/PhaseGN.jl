@@ -18,6 +18,8 @@ include("phi.jl")
 include("pressure.jl")
 include("width.jl")
 include("ext_momentum.jl")
+include("external_momentum.jl")
+include("phase.jl")
 include("structure_factor.jl")
 include("plasmon.jl")
 
