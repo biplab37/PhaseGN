@@ -12,6 +12,7 @@ function imagpart_phi(ω, temp, μ, param)
         return 0.0
     end
 end
+
 function imagpart_phi(ω, temp, μ, m, param)
     Nσ = ω^2 - 4 * m^2
     if Nσ > 0 && abs(ω) < 2 * sqrt(param.Λ^2 + m^2)
@@ -32,6 +33,7 @@ function realpart_phi(ω, temp, μ, param)
     integrand(p) = -p * (1) * (1 - numberF(temp, -μ, Ep(p)) - numberF(temp, μ, Ep(p))) * (PrincipalValue(ω - 2 * Ep(p)) - PrincipalValue(ω + 2 * Ep(p)) + PrincipalValue(Ep(p))) / π
     return integrate(integrand, 0.0, param.Λ)
 end
+
 function realpart_phi(ω, temp, μ, m, param)
     Ep(p) = sqrt(p^2 + m^2)
     integrand(p) = -p * (1) * (1 - numberF(temp, -μ, Ep(p)) - numberF(temp, μ, Ep(p))) * (PrincipalValue(ω - 2 * Ep(p)) - PrincipalValue(ω + 2 * Ep(p)) + PrincipalValue(Ep(p))) / π
@@ -44,6 +46,7 @@ function fullrealpart_phi(ω, temp, μ, param)
     integrand(p) = 1 / π + p * (1) * (1 - numberF(temp, -μ, Ep(p)) - numberF(temp, μ, Ep(p))) * (PrincipalValue(ω - 2 * Ep(p)) - PrincipalValue(ω + 2 * Ep(p))) / π
     return -1 / π + integrate(integrand, 0.0, param.Λ)
 end
+
 function fullrealpart_phi(ω, temp, μ, m, param)
     Ep(p) = sqrt(p^2 + m^2)
     integrand(p) = 1 / π + p * (1) * (1 - numberF(temp, -μ, Ep(p)) - numberF(temp, μ, Ep(p))) * (PrincipalValue(ω - 2 * Ep(p)) - PrincipalValue(ω + 2 * Ep(p))) / π
@@ -80,6 +83,7 @@ function phasesc_phi(ω, temp, μ, param)
     impi = imagpart_phi(ω, temp, μ, param)
     return -angle(Complex(repi, impi))
 end
+
 function phasesc_phi(ω, temp, μ, m, param)
     repi = realpart_phi(ω, temp, μ, m, param)
     impi = imagpart_phi(ω, temp, μ, m, param)
