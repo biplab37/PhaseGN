@@ -1,3 +1,8 @@
+"""
+    imagpart_sigma_q(ω, temp, μ, q, param)
+
+Returns the imaginary part of the polarisation function of the scalar channel for a given frequency ω, temperature temp, chemical potential μ, and momentum q.
+"""
 function imagpart_sigma_q(ω, temp, μ, q, param)
     if q == 0.0
         return imagpart_sigma(ω, temp, μ, param)
@@ -33,6 +38,11 @@ function imagpart_sigma_q(ω, temp, μ, q, param)
     end
 end
 
+"""
+    imagpart_phi_q(ω, temp, μ, q, param)
+
+Returns the imaginary part of the polarisation function for the pseudo-scalar channel for a given frequency ω, temperature temp, chemical potential μ, and momentum q.
+"""
 function imagpart_phi_q(ω, temp, μ, q, param)
     if q == 0.0
         return imagpart_phi(ω, temp, μ, param)

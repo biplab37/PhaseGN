@@ -1,5 +1,10 @@
 # This file contains the code to calculate quantities at Mean Field approximation
 
+"""
+    pressure_MF(temp, μ, param::Parameters; norm)
+
+Returns the pressure in the mean field approximation at a given temperature and chemical potential μ.
+"""
 function pressure_MF(temp, μ, param::Parameters; norm=false::Bool)
     σ₁ = σ1(temp, μ, param)
     M = param.M
@@ -20,6 +25,11 @@ function pressure_MF(temp, param::Parameters; norm=false::Bool)
     return nothing
 end
 
+"""
+    energy_MF(temp, μ, param::Parameters; norm)
+
+Returns the energy in the mean field approximation at a given temperature and chemical potential μ.
+"""
 function energy_MF(temp, μ, param::Parameters; norm=false::Bool)
     β = 1 / temp
     σ = σ1(temp, μ, param)
@@ -33,6 +43,11 @@ function energy_MF(temp, μ, param::Parameters; norm=false::Bool)
     end
 end
 
+"""
+    number_MF(temp, μ, param::Parameters; norm)
+
+Returns the number in the mean field approximation at a given temperature and chemical potential μ.
+"""
 function number_MF(temp, μ, param::Parameters; norm=false::Bool)
     σ = σ1(temp, μ, param)
     β = 1 / temp
