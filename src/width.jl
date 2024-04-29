@@ -32,7 +32,7 @@ function Γϕ(temp, μ, param)
     rep = realpartI2(temp, μ, param)
     i1 = I1(temp, μ, param)
 
-    Γ = (i1 * imp / ((imp^2 + rep^2) * M))
+    Γ = sqrt(i1 * imp / ((imp^2 + rep^2) * M))
     return Γ
 end
 

@@ -1,3 +1,8 @@
+"""
+    realpart(imagpart, ω, args...)
+
+Returns the real part of the polarisation function given the imaginary part using Krammers-Kronig relations.
+"""
 function realpart(imagpart::Function, ω, args...)
     integrand(ν) = 2 * ν * imagpart(ν, args...) * (PrincipalValue(ν^2 - ω^2) - PrincipalValue(ν^2)) / π
     int_sub(ν) = integrand(1 / (1 - ν)) / (1 - ν)^2

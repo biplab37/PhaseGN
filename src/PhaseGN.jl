@@ -8,6 +8,7 @@ module PhaseGN
 using UsefulFunctions: PVintegral
 using Cubature, PolyLog
 using NLsolve: nlsolve
+using RecipesBase
 
 include("parameters.jl")
 include("helperfunction.jl")
