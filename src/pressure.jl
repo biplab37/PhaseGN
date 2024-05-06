@@ -22,8 +22,9 @@ function pressure(func::Function, temp, μ, m, M, Γ, param::Parameters)
 end
 
 function pressure_fl_q(func::Function, temp, μ, q, param::Parameters)
-    integrand(s) = (1 + 2 / (exp(sqrt(s + q^2) / temp) - 1)) * func(sqrt(s + q^2), temp, μ, q, param) / (2π)
-    return integrate(integrand, -q^2, param.Λ^2)
+    integrand(ω) = (1 + 2 / (exp(ω / temp) - 1)) * func(ω, temp, μ, q, param) / (4π^2)
+    return integrate(integrand, 0, param.Λ)
 end
+
 
 export pressure

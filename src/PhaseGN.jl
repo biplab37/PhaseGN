@@ -23,6 +23,8 @@ include("external_momentum.jl")
 include("phase.jl")
 include("structure_factor.jl")
 include("plasmon.jl")
+include("pressure_fluc.jl")
+include("phase_defn.jl")
 
 end
 

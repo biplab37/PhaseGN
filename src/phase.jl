@@ -7,11 +7,11 @@ function realpart(imagpart::Function, ω, args...)
     integrand(ν) = 2 * ν * imagpart(ν, args...) * (PrincipalValue(ν^2 - ω^2) - PrincipalValue(ν^2)) / π
     int_sub(ν) = integrand(1 / (1 - ν)) / (1 - ν)^2
 
-    return integrate(integrand, 0, 1) + integrate(int_sub, 0, 1)
+    return integrate(integrand, 0.01, 300.0) #+ integrate(int_sub, 0.0, 1.0)
 end
 
 function phasesc(imagpart::Function, ω, args...)
-    return angle(Complex(realpart(imagpart, ω, args...), imagpart(ω, args...)))
+    return angle(Complex(realpart(imagpart, ω, args...), -imagpart(ω, args...)))
 end
 
 function phaser(imagpart::Function, Π0::Function, ω, args...)
@@ -19,6 +19,12 @@ function phaser(imagpart::Function, Π0::Function, ω, args...)
     impi = imagpart(ω, args...)
     Π00 = Π0(args...)
     return -angle(Complex(repi - (repi^2 + impi^2) / Π00, -impi))
+end
+
+function phase_tot(imagpart::Function, Π0::Function, ω, args...)
+    phase_r = phaser(imagpart, Π0, ω, args...)
+    phase_sc = phasesc(imagpart, ω, args...)
+    return phase_r + phase_sc
 end
 
 """
@@ -38,13 +44,11 @@ function phase(imagpart::Function, Π0::Function, ω, args...)
 end
 
 function phase(imagpart::Function, Π0::Function, ωrange::AbstractArray, args...)
-    phaser = zero(length(ωrange))
-    phasesc = zero(length(ωrange))
-    phase = zero(length(ωrange))
+    phases = zeros(length(ωrange), 3)
     for (i, ω) in enumerate(ωrange)
-        phaser[i], phasesc[i], phase[i] = phase(imagpart, Π0, ω, args...)
+        phases[i, :] .= phase(imagpart, Π0, ω, args...)
     end
-    return [phasesc, phaser, phase]
+    return phases
 end
 
-export realpart, phasesc, phaser, phase
+export realpart, phasesc, phaser, phase_tot, phase

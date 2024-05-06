@@ -49,7 +49,7 @@ function imagpart_phi_q(ω, temp, μ, q, param)
     else
         m = σ1(temp, μ, param)
         s = ω^2 - q^2
-        if abs(ω) > 2 * sqrt(param.Λ^2 + m^2)
+        if abs(ω) >= 2 * sqrt(param.Λ^2 + m^2)
             return 0.0
 
         elseif s < 0.0
