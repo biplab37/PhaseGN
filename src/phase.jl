@@ -21,6 +21,11 @@ function phaser(imagpart::Function, Π0::Function, ω, args...)
     return -angle(Complex(repi - (repi^2 + impi^2) / Π00, -impi))
 end
 
+"""
+    phase_tot(imagpart::Function, Π0::Function, ω, args...)
+
+Returns the total phase for a given imaginary part of the function.
+"""
 function phase_tot(imagpart::Function, Π0::Function, ω, args...)
     phase_r = phaser(imagpart, Π0, ω, args...)
     phase_sc = phasesc(imagpart, ω, args...)

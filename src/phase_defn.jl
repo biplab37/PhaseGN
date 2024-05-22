@@ -1,3 +1,6 @@
+## Function definitions for specific channels, their phases and the total phase.
+#TODO: 
+
 function phase_phi(temp, μ, ω, q, param::Parameters)
     return phase(imagpart_phi_q, Π0_phi, ω, temp, μ, q, param)
 end
