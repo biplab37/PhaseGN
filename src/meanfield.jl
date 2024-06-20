@@ -1,4 +1,4 @@
-# This file contains the code to calculate quantities at Mean Field approximation
+# This file contains the code to calculate quantities at Mean Field approximation.
 
 """
     pressure_MF(temp, μ, param::Parameters; norm)
@@ -19,10 +19,15 @@ end
 
 #TODO: finish the implementation of the mean field approximation at zero chemical potential
 function pressure_MF(temp, param::Parameters; norm=false::Bool)
-    σ₁ = σ1(temp, μ, param)
-    M = param.M
-    T_c = param.M / (2 * log(2))
-    return nothing
+    return pressure_MF(temp, 0.0, param, norm=norm)
+end
+
+function pressure_MF(trange::AbstractVector, μ, param::Parameters, norm=false)
+    pres = zeros(length(trange))
+    for (i,T) in enumerate(trange)
+        pres[i] = pressure_MF(T, μ, param, norm=norm)
+    end
+    return pres
 end
 
 """
@@ -43,6 +48,13 @@ function energy_MF(temp, μ, param::Parameters; norm=false::Bool)
     end
 end
 
+function energy_MF(trange::AbstractVector, μ, param::Parameters, norm=false::Bool)
+    ener = zeros(length(trange))
+    for (i, T) in enumerate(trange)
+        ener[i] = energy_MF(T, μ, param, norm = norm)
+    end
+end
+
 """
     number_MF(temp, μ, param::Parameters; norm)
 
@@ -57,6 +69,13 @@ function number_MF(temp, μ, param::Parameters; norm=false::Bool)
         return number / temp^2
     else
         return number
+    end
+end
+
+function number_MF(trange::AbstractVector, μ, param::Parameters, norm=false::Bool)
+    numb = zeros(length(trange))
+    for (i, T) in enumerate(trange)
+        numb[i] = number_MF(T, μ, param, norm = norm)
     end
 end
 
