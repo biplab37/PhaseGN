@@ -25,6 +25,7 @@ include("structure_factor.jl")
 include("plasmon.jl")
 include("pressure_fluc.jl")
 include("phase_defn.jl")
+include("phase_transition_order.jl")
 
 end
 
