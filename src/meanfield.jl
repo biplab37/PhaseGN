@@ -1,5 +1,6 @@
 # This file contains the code to calculate quantities at Mean Field approximation.
 
+
 """
     pressure_MF(temp, μ, param::Parameters; norm)
 
