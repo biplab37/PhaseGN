@@ -1,5 +1,10 @@
 # This file contains the code to calculate quantities at Mean Field approximation.
 
+function Omega(σ, temp, μ, param)
+    term_vac = -σ^2/(2π) + abs(σ)^3/(3π)
+    term_temp(p) = -temp*p*(log(1 + exp(-(sqrt(p^2 + σ^2) - μ)/temp)) + log(1 + exp(-(sqrt(p^2 + σ^2) + μ)/temp)))/π
+    return term_vac + integrate(term_temp, 0, param.Λ)
+end
 
 """
     pressure_MF(temp, μ, param::Parameters; norm)
@@ -80,4 +85,4 @@ function number_MF(trange::AbstractVector, μ, param::Parameters, norm=false::Bo
     end
 end
 
-export pressure_MF, energy_MF, number_MF
+export pressure_MF, energy_MF, number_MF, Omega
