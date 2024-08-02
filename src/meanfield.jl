@@ -1,8 +1,8 @@
 # This file contains the code to calculate quantities at Mean Field approximation.
 
 function Omega(σ, temp, μ, param)
-    term_vac = -σ^2/(2π) + abs(σ)^3/(3π)
-    term_temp(p) = -temp*p*(log(1 + exp(-(sqrt(p^2 + σ^2) - μ)/temp)) + log(1 + exp(-(sqrt(p^2 + σ^2) + μ)/temp)))/π
+    term_vac = -σ^2 / (2π) + abs(σ)^3 / (3π)
+    term_temp(p) = -temp * p * (log(1 + exp(-(sqrt(p^2 + σ^2) - μ) / temp)) + log(1 + exp(-(sqrt(p^2 + σ^2) + μ) / temp))) / π
     return term_vac + integrate(term_temp, 0, param.Λ)
 end
 
@@ -30,7 +30,7 @@ end
 
 function pressure_MF(trange::AbstractVector, μ, param::Parameters, norm=false)
     pres = zeros(length(trange))
-    for (i,T) in enumerate(trange)
+    for (i, T) in enumerate(trange)
         pres[i] = pressure_MF(T, μ, param, norm=norm)
     end
     return pres
@@ -57,7 +57,7 @@ end
 function energy_MF(trange::AbstractVector, μ, param::Parameters, norm=false::Bool)
     ener = zeros(length(trange))
     for (i, T) in enumerate(trange)
-        ener[i] = energy_MF(T, μ, param, norm = norm)
+        ener[i] = energy_MF(T, μ, param, norm=norm)
     end
 end
 
@@ -81,7 +81,7 @@ end
 function number_MF(trange::AbstractVector, μ, param::Parameters, norm=false::Bool)
     numb = zeros(length(trange))
     for (i, T) in enumerate(trange)
-        numb[i] = number_MF(T, μ, param, norm = norm)
+        numb[i] = number_MF(T, μ, param, norm=norm)
     end
 end
 
