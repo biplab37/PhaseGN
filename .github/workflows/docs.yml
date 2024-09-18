@@ -11,10 +11,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Set up Julia 
+      - name: Set up Julia
         uses: julia-actions/setup-julia@v1
-        with:
-          version: "1.8"
       - uses: julia-actions/julia-buildpkg@v1
       - name: Build and deploy
         uses: julia-actions/julia-docdeploy@v1
