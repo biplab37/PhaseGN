@@ -89,16 +89,40 @@ function imagpart_phi_q(ω, temp, μ, q, param)
 
         elseif s < 0.0
             y = q * sqrt(1 - 4m^2 / s)
+            if y >= sqrt(param.Λ^2 + m^2)
+                return 0.0
+            end
             pauli_blocking3(E1) = numberF(temp, μ, 0.5 * (E1 - ω)) - numberF(temp, μ, 0.5 * (E1 + ω)) + numberF(temp, μ, 0.5 * (-E1 - ω)) - numberF(temp, μ, 0.5 * (-E1 + ω))
-            integrand3(E1) = -(s) * pauli_blocking3(E1) / (sqrt(4 * ((E1^2 + ω^2) / 4 - m^2 - q^2 / 4) * q^2 - E1^2 * ω^2) * 4π)
+            function integrand3(E1)
+                discriminant = (4 * ((E1^2 + ω^2) / 4 - m^2 - q^2 / 4) * q^2 - E1^2 * ω^2)
+                if discriminant > 0.0
+                    return s * pauli_blocking3(E1) / (sqrt(discriminant) * 4π)
+                else
+                    # @show discriminant, y, E1, s
+                    return 0.0
+                end
+            end
+            # integrand3(E1) = real(-(s) * pauli_blocking3(E1) / (sqrt(Complex(4 * ((E1^2 + ω^2) / 4 - m^2 - q^2 / 4) * q^2 - E1^2 * ω^2)) * 4π))
             return integrate(integrand3, y, sqrt(param.Λ^2 + m^2))
 
         elseif s > 4m^2
             y = q * sqrt(1 - 4m^2 / s)
+            if y < 1e-5
+                return 0.0
+            end
 
             if ω > 0.0
                 pauli_blocking1(E2) = numberF(temp, μ, 0.5 * (-E2 - ω)) - numberF(temp, μ, 0.5 * (-E2 + ω))
-                integrand1(E2) = (s) * pauli_blocking1(E2) / (sqrt(4 * ((E2^2 + ω^2) / 4 - m^2 - q^2 / 4) * q^2 - E2^2 * ω^2) * 4π)
+                function integrand1(E2)
+                    discriminant = (4 * ((E2^2 + ω^2) / 4 - m^2 - q^2 / 4) * q^2 - E2^2 * ω^2)
+                    if discriminant > 0.0
+                        return s * pauli_blocking1(E2) / (sqrt(discriminant) * 4π)
+                    else
+                        # @show discriminant, y, E2, s, s * pauli_blocking1(E2) / sqrt(Complex(discriminant))
+                        return 0.0
+                    end
+                end
+                # integrand1(E2) = (s) * pauli_blocking1(E2) / (sqrt((4 * ((E2^2 + ω^2) / 4 - m^2 - q^2 / 4) * q^2 - E2^2 * ω^2)) * 4π)
                 return integrate(integrand1, -y, y)
             else
                 pauli_blocking2(E2) = numberF(temp, μ, 0.5 * (E2 - ω)) - numberF(temp, μ, 0.5 * (E2 + ω))

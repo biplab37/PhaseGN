@@ -7,7 +7,7 @@ function realpart(imagpart::Function, ω, args...)
     integrand(ν) = 2 * ν * imagpart(ν, args...) * (PrincipalValue(ν^2 - ω^2) - PrincipalValue(ν^2)) / π
     int_sub(ν) = integrand(1 / (1 - ν)) / (1 - ν)^2
 
-    return integrate(integrand, 0.01, 300.0) #+ integrate(int_sub, 0.0, 1.0)
+    return integrate(integrand, 0.0, 200.0)# + integrate(int_sub, 0.0, 1.0)
 end
 
 function phasesc(imagpart::Function, ω, args...)
