@@ -18,6 +18,7 @@ end
 include("phase_test.jl")
 include("pressure_test.jl")
 include("masses_test.jl")
+include("external_momentum_test.jl")
 
 @testset "Mean Field" begin
     @test pressure_MF(0.01, 0.0, param) < 0.01
