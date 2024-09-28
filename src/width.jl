@@ -84,8 +84,8 @@ function Γ_ϕ(temp, μ, param)
     ωX = M_phi(temp, μ, param)
     m = σ1(temp, μ, param)
 
-    impi = imagpart_ϕ(temp, μ, ωX, m, param)
-    rep(ω) = fullrealpart_ϕ(temp, μ, ω, m, param) - realpart_ϕ(temp, μ, ω, m, param)
+    impi = imagpart_phi(temp, μ, ωX, m, param)
+    rep(ω) = fullrealpart_phi(temp, μ, ω, m, param) - realpart_phi(temp, μ, ω, m, param)
     repi = rep(ωX)
 
     drepi = (rep(sqrt(ωX^2 + dω)) - rep(ωX)) / dω
