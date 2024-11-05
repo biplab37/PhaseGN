@@ -5,3 +5,8 @@ docs/build
 .vscode/
 paper/
 Session.vim
+.ipynb_checkpoints/
+
+/*.pdf
+/*.png
+/*.svg
