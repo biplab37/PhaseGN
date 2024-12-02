@@ -18,4 +18,12 @@ function structure_factor_σ(T, μ, ω, q, param::Parameters)
     return 1 / (2π) * (-2 * imagpart_σ_q(T, μ, ω, q, param)) / (exp(ω / T) - 1)
 end
 
-export structure_factor_ϕ, structure_factor_σ
+function spectral_phi(T, μ, ω, q, param::Parameters)
+    im_part = imagpart_phi_q(ω, T, μ, q, param)
+    re_part = realpart(imagpart_phi_q, ω, T, μ, q, param)
+    m = σ1(T, μ, param)
+    en = sqrt(q^2 + m^2)
+    return abs(im_part) / ((ω - en - re_part)^2 + (im_part)^2)
+end
+
+export structure_factor_ϕ, structure_factor_σ, spectral_phi
