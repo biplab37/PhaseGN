@@ -11,7 +11,7 @@ Returns the real part of the polarisation function given the imaginary part usin
 # end
 
 function realpart(imagpart::Function, ω, T, μ, q, param)
-    integrand(ν) = 2*ν*imagpart(ν, T, μ, a, param)/(π*(ν +  ω))
+    integrand(ν) = 2*ν*imagpart(ν, T, μ, q, param)/(π*(ν +  ω))
     return (param.Λ - 1)/π - PVintegral(integrand, 0.0, 2.1*param.Λ, ω, integrate)
 end
 
