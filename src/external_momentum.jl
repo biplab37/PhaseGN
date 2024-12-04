@@ -157,7 +157,7 @@ function imagpart_phi_q1(ω, temp, μ, q, param)
 
     if s < 0.0
         y = q * sqrt(1 - 4m^2 / s)
-        if y >= En_cutoff
+        if y >= En_cutoff # what happens when you don't assume it
             return 0.0
         end
         pauli_blocking3(E1) = numberF(temp, μ, 0.5 * (E1 - ω)) - numberF(temp, μ, 0.5 * (E1 + ω)) + numberF(temp, μ, 0.5 * (-E1 - ω)) - numberF(temp, μ, 0.5 * (-E1 + ω))
