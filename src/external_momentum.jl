@@ -147,7 +147,7 @@ function imagpart_phi_q1(ω, temp, μ, q, param)
     s = ω^2 - q^2
     En_cutoff = sqrt(param.Λ^2 + m^2)
 
-    if abs(s) >= 2 * En_cutoff
+    if abs(s) >= 4 * En_cutoff^2
         return 0.0
     end
 
@@ -157,7 +157,7 @@ function imagpart_phi_q1(ω, temp, μ, q, param)
 
     if s < 0.0
         y = q * sqrt(1 - 4m^2 / s)
-        if y >= En_cutoff
+        if y >= En_cutoff # what happens when you don't assume it
             return 0.0
         end
         pauli_blocking3(E1) = numberF(temp, μ, 0.5 * (E1 - ω)) - numberF(temp, μ, 0.5 * (E1 + ω)) + numberF(temp, μ, 0.5 * (-E1 - ω)) - numberF(temp, μ, 0.5 * (-E1 + ω))
@@ -170,7 +170,7 @@ function imagpart_phi_q1(ω, temp, μ, q, param)
                 return 0.0
             end
         end
-        return integrate(integrand3, y, En_cutoff)
+        return -integrate(integrand3, y, En_cutoff)
 
     else # s > 4m^2
         y = q * sqrt(1 - 4m^2 / s)
