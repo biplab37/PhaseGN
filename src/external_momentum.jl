@@ -15,7 +15,7 @@ function imagpart_sigma_q(ω, temp, μ, q, param)
         return 0.0
     end
 
-    if (0.0<=s<=4m^2)
+    if (0.0 <= s <= 4m^2)
         return 0.0
     end
 
@@ -80,7 +80,7 @@ end
 
 Returns the imaginary part of the polarisation function for the pseudo-scalar channel for a given frequency ω, temperature temp, chemical potential μ, and momentum q.
 """
-function imagpart_phi_q(ω, temp, μ, q, param)
+function imagpart_phi_q1(ω, temp, μ, q, param)
     if q == 0.0
         return imagpart_phi(ω, temp, μ, param)
     else
@@ -138,20 +138,20 @@ function imagpart_phi_q(ω, temp, μ, q, param)
     end
 end
 
-function imagpart_phi_q1(ω, temp, μ, q, param)
+function imagpart_phi_q(ω, temp, μ, q, param)
     if q == 0.0
         return imagpart_phi(ω, temp, μ, param)
-    end 
+    end
 
     m = σ1(temp, μ, param)
     s = ω^2 - q^2
     En_cutoff = sqrt(param.Λ^2 + m^2)
 
-    if abs(s) >= 4 * En_cutoff^2
+    if s >= 4 * En_cutoff^2 || s <= -param.Λ^2
         return 0.0
     end
 
-    if (0.0<=s<=4m^2)
+    if (0.0 <= s <= 4m^2)
         return 0.0
     end
 
@@ -166,7 +166,7 @@ function imagpart_phi_q1(ω, temp, μ, q, param)
             if discriminant > 0.0
                 return s * pauli_blocking3(E1) / (sqrt(discriminant) * 4π)
             else
-                # @show discriminant, y, E1, s
+                @show discriminant, y, E1, s
                 return 0.0
             end
         end

@@ -14,7 +14,7 @@ function phase_at_thresold(q, temp, mu, param::Parameters)
     m = σ1(temp, mu, param)
     omega0 = sqrt(4m^2 + q^2)
     # points = [omega0 - 0.01, omega0, omega0+0.01]
-    return π - (PhaseGN.phasetot_phi(temp, mu, omega0, q, param))
+    return π - (PhaseGN.phasetot_phi_q(temp, mu, omega0, q, param))
 end
 
 function mott_momenta(temp, mu, param; max=1.0)
