@@ -3,11 +3,18 @@
 
 Returns the real part of the polarisation function given the imaginary part using Krammers-Kronig relations.
 """
-function realpart(imagpart::Function, ω, args...)
-    integrand(ν) = 2 * ν * imagpart(ν, args...) * (PrincipalValue(ν^2 - ω^2) - PrincipalValue(ν^2)) / π
+function realpart(imagpart::Function, ω, T, μ, param)
+    integrand(ν) = 2 * ν * imagpart(ν, T, μ, param) * (PrincipalValue(ν^2 - ω^2) - PrincipalValue(ν^2)) / π
     int_sub(ν) = integrand(1 / (1 - ν)) / (1 - ν)^2
 
-    return integrate(integrand, 0.001, 200.0)# + integrate(int_sub, 0.0, 1.0)
+    return integrate(integrand, 0.001, param.Λ)# + integrate(int_sub, 0.0, 1.0)
+end
+
+function realpart(imagpart::Function, ω, T, μ, q, param)
+    m = σ1(T, μ, param)
+    cutoff = 2*sqrt(param.Λ^2 + q^2/4 + m^2)
+    integrand(ν) = 2 * ν * (imagpart(ν, T, μ, q, param) * PrincipalValue(ν^2 - ω^2) - imagpart(ν, T, μ, 0.0, param) * PrincipalValue(ν^2)) / π
+    return integrate(integrand, 0.0, cutoff)
 end
 
 function realpart_3(imagpart::Function, ω, T, μ, q, param)
@@ -47,7 +54,7 @@ function phase_tot(imagpart::Function, Π0::Function, ω, args...)
 end
 
 function phasetot(imagpart::Function, ω, args...)
-    repi = realpart(imagpart, ω, args...)
+    repi = realpart_3(imagpart, ω, args...)
     impi = imagpart(ω, args...)
     return angle(Complex(repi, impi))
 end

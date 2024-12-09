@@ -146,8 +146,13 @@ function imagpart_phi_q(ω, temp, μ, q, param)
     m = σ1(temp, μ, param)
     s = ω^2 - q^2
     En_cutoff = sqrt(param.Λ^2 + m^2)
+    ω_max = 2*sqrt(param.Λ^2 + q^2/4 + m^2)
 
-    if s >= 4 * En_cutoff^2 || s <= -param.Λ^2
+    # if s <= -param.Λ^2
+    #     return 0.0
+    # end
+
+    if ω >= ω_max
         return 0.0
     end
 
@@ -157,7 +162,7 @@ function imagpart_phi_q(ω, temp, μ, q, param)
 
     if s < 0.0
         y = q * sqrt(1 - 4m^2 / s)
-        if y >= En_cutoff # what happens when you don't assume it
+        if y >= ω_max # what happens when you don't assume it
             return 0.0
         end
         pauli_blocking3(E1) = numberF(temp, μ, 0.5 * (E1 - ω)) - numberF(temp, μ, 0.5 * (E1 + ω)) + numberF(temp, μ, 0.5 * (-E1 - ω)) - numberF(temp, μ, 0.5 * (-E1 + ω))
@@ -170,22 +175,22 @@ function imagpart_phi_q(ω, temp, μ, q, param)
                 return 0.0
             end
         end
-        return -integrate(integrand3, y, En_cutoff)
+        return -integrate(integrand3, y+1e-5, ω_max)
 
     else # s > 4m^2
         y = q * sqrt(1 - 4m^2 / s)
-        if y < 1e-5 ## integral is from -y to y
-            return 0.0
-        end
+        # if y < 1e-5 ## integral is from -y to y
+        #     return 0.0
+        # end
 
         if ω > 0.0
             pauli_blocking1(E2) = numberF(temp, μ, 0.5 * (-E2 - ω)) - numberF(temp, μ, 0.5 * (-E2 + ω))
             function integrand1(E2)
-                discriminant = (4 * ((E2^2 + ω^2) / 4 - m^2 - q^2 / 4) * q^2 - E2^2 * ω^2)
+                discriminant = ((E2^2 + ω^2 - 4*m^2 - q^2) * q^2 - E2^2 * ω^2)
                 if discriminant > 0.0
                     return s * pauli_blocking1(E2) / (sqrt(discriminant) * 4π)
                 else
-                    # @show discriminant, y, E2, s, s * pauli_blocking1(E2) / sqrt(Complex(discriminant))
+                    @show discriminant, y, E2, s, s * pauli_blocking1(E2) / sqrt(Complex(discriminant))
                     return 0.0
                 end
             end
