@@ -7,6 +7,6 @@ paper/
 Session.vim
 .ipynb_checkpoints/
 
-/*.pdf
-/*.png
-/*.svg
+*.pdf
+*.png
+*.svg
