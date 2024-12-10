@@ -99,4 +99,18 @@ function M_phi(temp, μ, param::Parameters)
     end
 end
 
-export σ1, M_phi, M_sigma
+function mass_k(temp, μ, k, param)
+    β = 1/temp
+    integrand(m) = m*(m - param.M) - π*param.κ + angular_integral(temp, μ, k, m, param)/2π
+    return PhaseGN.fzero(integrand, 1.0).zero[1]
+end
+
+function angular_integral(temp, μ, k, m, param)
+    β = 1/temp
+    f(sign, x) = PhaseGN.numberF(temp, sign*μ, x)
+    ksq(p) = p^2 + k^2/4 + m^2
+    integrand(p, θ) = p*m*(f(+1.0, sqrt(ksq(p) + p*k*cos(θ))) + f(-1.0, sqrt(ksq(p) - p*k*cos(θ))))/sqrt(p^2+m^2)
+    return PhaseGN.integrate(x->integrand(x[1], x[2]), [0.0, 0.0], [param.Λ, 2π])
+end
+
+export σ1, M_phi, M_sigma, mass_k
