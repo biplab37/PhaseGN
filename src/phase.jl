@@ -13,7 +13,13 @@ end
 function realpart(imagpart::Function, ω, T, μ, q, param)
     m = σ1(T, μ, param)
     cutoff = 2*sqrt(param.Λ^2 + q^2/4 + m^2)
-    integrand(ν) = 2 * ν * (imagpart(ν, T, μ, q, param) * PrincipalValue(ν^2 - ω^2) - imagpart(ν, T, μ, 0.0, param) * PrincipalValue(ν^2)) / π
+    integrand(ν) = 2 * ν * (imagpart(ν, T, μ, q, m, param) * PrincipalValue(ν^2 - ω^2) - imagpart(ν, T, μ, 0.0, param) * PrincipalValue(ν^2)) / π
+    return integrate(integrand, 0.0, cutoff)
+end
+
+function realpart(imagpart::Function, ω, T, μ, q, m, param::Parameters)
+    cutoff = 2*sqrt(param.Λ^2 + q^2/4 + m^2)
+    integrand(ν) = 2 * ν * (imagpart(ν, T, μ, q, m, param) * PrincipalValue(ν^2 - ω^2) - imagpart(ν, T, μ, 0.0, m, param) * PrincipalValue(ν^2)) / π
     return integrate(integrand, 0.0, cutoff)
 end
 
@@ -30,9 +36,9 @@ function realpart_3_k(imagpart::Function, ω, T, μ, q, param)
     return (param.Λ - 1) / π - PVintegral(integrand, 0.0, 2.1 * param.Λ, ω, integrate)
 end
 
-function realpart_3(imagpart::Function, ω, T, μ, q, param)
-    integrand(ν) = 2 * ν * imagpart(ν, T, μ, q, param) / (π * (ν + ω))
-    return (param.Λ - 1) / π - PVintegral(integrand, 0.0, 2.1 * param.Λ, ω, integrate)
+function realpart_3(imagpart::Function, ω, T, μ, q, m, param)
+    integrand(ν) = 2 * ν * imagpart(ν, T, μ, q, m, param) / (π * (ν + ω))
+    return (param.Λ - 1) / π - PVintegral(integrand, 0.0, sqrt(5)* param.Λ, ω, integrate)
 end
 
 function realpart_2(imagpart::Function, ω, T, μ, q, param)

@@ -97,7 +97,7 @@ function find_zero_interval_start(func::Function, a::Float64, b::Float64; tol::F
         The approximate value of 'c', or throws an error if not found.
     """
 
-    is_zero(x, epsilon=1e-10) = abs(func(x)) < epsilon
+    is_zero(x, epsilon=1e-4) = abs(func(x)) < epsilon
 
     if is_zero(a)
         return a
