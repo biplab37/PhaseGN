@@ -245,6 +245,26 @@ function imagpart_phi_q_refactored_k(ω, temp, μ, q, param)
     end
 end
 
+function imagpart_phi_q_refactored_k(ω, temp, μ, q, m, param)
+    if q==0.0
+        return imagpart_phi(ω, temp, μ, param)
+    end
+
+    # parameters
+    s = ω^2 - q^2
+    ω_max = 2*sqrt(param.Λ^2 + q^2/4 + m^2)
+
+    if ω >= ω_max || 0.0<=s<=4m^2
+        return 0.0
+    end
+
+    if s<0
+        return imagpart_phi_q_s_negative(ω, temp, μ, q, m, s, ω_max)
+    else # s>4m^2
+        return imagpart_phi_q_s_positive(ω, temp, μ, q, m, s, ω_max)
+    end
+end
+
 function imagpart_phi_q_s_negative(ω, temp, μ, q, m, s, ω_max)
     y = q*sqrt(1 - 4m^2/s)
     if y >= ω_max
@@ -276,7 +296,6 @@ function imagpart_phi_q_s_positive(ω, temp, μ, q, m, s, ω_max)
         end
     end
     return integrate(integrand_2, -y, y)
-
 
 end
 

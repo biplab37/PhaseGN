@@ -75,7 +75,7 @@ Returns the exciton mass of scalar channels σ₁ and σ₂
 function M_sigma(temp, μ, param::Parameters)
     m = σ1(temp, μ, param)
     func(ME) = ME^2 - 4 * m^2 - param.κ * gE2(temp, μ, ME, param) / m
-    result = bisection(func, 0.0, 5)
+    result = bisection(func, 0.0, param.Λ)
     if (result ≈ 5 || result == 0.0)
         print("mass not found")
     else
@@ -91,8 +91,8 @@ Returns the exciton mass of scalar channels ϕ₁ and ϕ₂
 function M_phi(temp, μ, param::Parameters)
     m = σ1(temp, μ, param)
     func(ME) = ME^2 - param.κ * gE2(temp, μ, ME, param) / m
-    result = bisection(func, 0.0, 5)
-    if (result == 5 || result == 0.0)
+    result = bisection(func, 0.0, param.Λ)
+    if (result == param.Λ || result == 0.0)
         print("mass not found")
     else
         return result
@@ -102,15 +102,15 @@ end
 function mass_k(temp, μ, k, param)
     β = 1/temp
     integrand(m) = m*(m - param.M) - π*param.κ + angular_integral(temp, μ, k, m, param)/2π
-    return PhaseGN.fzero(integrand, 1.0).zero[1]
+    return bisection(integrand, 0.0, param.M + 5*param.κ)
 end
 
 function angular_integral(temp, μ, k, m, param)
     β = 1/temp
-    f(sign, x) = PhaseGN.numberF(temp, sign*μ, x)
+    f(sign, x) = numberF(temp, sign*μ, x)
     ksq(p) = p^2 + k^2/4 + m^2
     integrand(p, θ) = p*m*(f(+1.0, sqrt(ksq(p) + p*k*cos(θ))) + f(-1.0, sqrt(ksq(p) - p*k*cos(θ))))/sqrt(p^2+m^2)
-    return PhaseGN.integrate(x->integrand(x[1], x[2]), [0.0, 0.0], [param.Λ, 2π])
+    return integrate(x->integrand(x[1], x[2]), [0.0, 0.0], [param.Λ, 2π])
 end
 
 export σ1, M_phi, M_sigma, mass_k
