@@ -154,4 +154,9 @@ function phase_phi(ω, temp, μ, m, Π00, param)
     return [phasesc, phaser, phasesc + phaser]
 end
 
+function mass_phi(temp, μ, param)
+    func(ME) = fullrealpart_phi(ME, temp, μ, param)
+    return bisection(func, 0.0, param.Λ)
+end
+
 export imagpart_phi, realpart_phi, fullrealpart_phi, phasesc_phi, phaser_phi, phase_phi, Π0_phi
