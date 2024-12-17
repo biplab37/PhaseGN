@@ -42,9 +42,19 @@ end
 	numberF(temp::Float64, μ::Float64, Energy::Float64)
 Returns the number density at a given `Energy`, chemical potential `μ` and `temp` for Fermionic Species.
 """
-function numberF(temp, μ, Energy)
-    β = 1 / temp
-    return 1 / (1 + exp(β * (Energy - μ)))
+function numberF(temp, μ, Energy; tol=1e-4)
+    if temp < 0
+        error("Temperature cannot be negative")
+    elseif temp < tol
+        @show temp
+        if Energy > μ
+            return 0.0
+        else
+            return 1.0
+        end
+    else
+        return 1.0 / (1.0 + exp((Energy - μ) / temp))
+    end
 end
 
 # using QuadGK
