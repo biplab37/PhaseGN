@@ -1,4 +1,4 @@
-p = Parameters(κ=0.01)
+p = Parameters(κ=0.01, Λ=5.0)
 
 μ = 0.0
 
@@ -13,6 +13,8 @@ energies = [enrgy(t) for t in trange]
 dp = diff(pressures)
 de = diff(energies)
 cs2 = (dp ./ de)
+
+plot(trange[1:end-1], cs2, marker=:circle)
 
 p1 = @pgf Axis(
     {

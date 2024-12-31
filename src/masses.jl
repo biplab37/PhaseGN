@@ -102,7 +102,7 @@ end
 function mass_k(temp, μ, k, param)
     β = 1/temp
     integrand(m) = m*(m - param.M) - π*param.κ + angular_integral(temp, μ, k, m, param)/2π
-    return bisection(integrand, 0.0, param.M + 5*param.κ)
+    return bisection(integrand, 0.0, 1.5*param.M)
 end
 
 function angular_integral(temp, μ, k, m, param)

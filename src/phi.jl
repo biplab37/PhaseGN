@@ -65,6 +65,12 @@ function Π0_phi(temp, μ, param)
     return -1 / π + integrate(integrand, 0.0, param.Λ)
 end
 
+function Π0_phi_m(temp, μ, m, param)
+    Ep(p) = sqrt(p^2 + m^2)
+    integrand(p) = 1 / π - p * (1) * (1 - numberF(temp, -μ, Ep(p)) - numberF(temp, μ, Ep(p))) / (π * Ep(p))
+    return -1 / π + integrate(integrand, 0.0, param.Λ)
+end
+
 @doc raw"""
 	phasesc_phi(temp,μ,ω,param)
 

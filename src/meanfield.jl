@@ -6,6 +6,12 @@ function Omega(σ, temp, μ, param)
     return term_vac + integrate(term_temp, 0, param.Λ)
 end
 
+function Omega_kappa(σ, temp, μ, param)
+    term_vac = -σ^2 / (2π) + abs(σ)^3 / (3π) - param.κ * σ
+    term_temp(p) = -temp * p * (log(1 + exp(-(sqrt(p^2 + σ^2) - μ) / temp)) + log(1 + exp(-(sqrt(p^2 + σ^2) + μ) / temp))) / π
+    return term_vac + integrate(term_temp, 0, param.Λ)
+end
+
 """
     pressure_MF(temp, μ, param::Parameters; norm)
 

@@ -12,8 +12,10 @@ end
 
 function pressure_fluctuation(T, param)
     integrand(x) = delta_integrand(x[1], x[2], T, param)/T^3
-    return PhaseGN.hcubature(integrand, [big(0.0), big(0.0)],[big(6*T), big(6*T)], reltol=1e-2)
+    return PhaseGN.hcubature(integrand, [0.0, 0.0],[sqrt(5)*param.Λ, param.Λ], reltol=1e-1)
 end
+
+pressure_fluctuation(0.2, Parameters(Λ=5.0))
 
 function pressure_fluctuations(trange, param)
     pressures = zeros(length(trange))
@@ -23,8 +25,8 @@ function pressure_fluctuations(trange, param)
     return pressures
 end
 
-trange = 0.1:0.1:2.0
-param = Parameters()
+trange = range(0.1, 2.0, length=4)
+param = Parameters(Λ=5.0)
 
 @time pressures = pressure_fluctuations(trange, param)
 
