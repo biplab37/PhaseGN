@@ -1,4 +1,4 @@
-module 3D
+module ThreeD
 
 using Cubature, PolyLog
 
