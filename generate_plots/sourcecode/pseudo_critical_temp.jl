@@ -83,7 +83,7 @@ function reduce_unique(list)
 end
 
 
-murange3 = 1.12:0.0002:1.15
+murange3 = 1.12:0.001:1.15
 all_zeros(1.135, param2)
 
 data_pseudo_critical = zeros(length(murange3), 3)
@@ -131,8 +131,8 @@ tr2 = sort(tr)
 
 plot(tr2, mur2, marker=:circle, fontfamily="Computer Modern", boxstyle=:border, lab="", xlabel=L"T/M", ylabel=L"\mu/M", grid=false)
 
-mu_list5 = sort(union(0.9:0.002:1.11, 0.0:0.05:0.9))
-temperatures3 = pseudo_critical_temp.(mu_list5, 0.0, param)
+mu_list5 = sort(union(0.9:0.002:1.24, 0.0:0.05:0.9))
+temperatures3 = pseudo_critical_temp.(mu_list5, 0.0, param2)
 
 plot(temperatures3, mu_list5, marker=:circle)
 scatter!(tr2, mur2, marker=:circle)
@@ -144,12 +144,12 @@ perm2 = sortperm(tr3)
 mur4 = mur3[perm2]
 tr4 = sort(tr3)
 
-plot([0.0; tr4], [(1 + sqrt(1 + 4 * π * 0.1)) / 2; mur4])
 
 trange = union(0.1:0.01:0.6, 0.6:0.001:0.725)
 
 mus = [PhaseGN.critical_line(t, param2) for t in trange]
 
+plot([0.0; tr4], [(1 + sqrt(1 + 4 * π * 0.1)) / 2; mur4])
 plot!([0.0; trange], [1.0; mus])
 
 using PGFPlotsX
