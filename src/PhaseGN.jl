@@ -29,10 +29,6 @@ include("momentum_effect_on_pressure.jl")
 include("mott.jl")
 # include("phase_transition_order.jl")
 
-<<<<<<< HEAD
-end
-=======
 include("3D/3d.jl")
 
 end
->>>>>>> 3D
