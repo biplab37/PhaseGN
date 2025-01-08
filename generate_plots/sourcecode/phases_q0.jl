@@ -1,34 +1,44 @@
 
-ωrange = 10 .^ (-2:0.02:3);
-phases = [phase_sigma(ω, 0.01, 0.0, Parameters()) for ω in ωrange];
+
+
+phase_tot_phi_1 = [delta_phi(ω, 0.0, 0.1, param) for ω in ωrange];
+using Plots
+plot(ωrange, phase_tot_phi_1, xaxis=:log, marker=:circle, xlabel=L"\omega", ylabel=L"\phi_\varphi", label="original")
+vline!([2*m, mm])
+
+
+mm = mPhi(0.1, 0.0, param, [0.0, 2.0], m)
+m = mass_k(0.1, 0.0, 0.0, param)
+ωrange = 10 .^ (-4:0.02:1.2);
+phases = [phase_sigma(ω, 0.1, 0.0, param) for ω in ωrange];
 phases_sc = first.(phases);
 phases_tot = last.(phases);
 phases_r = phases_tot - phases_sc;
-phasep = [phase_phi(ω, 0.01, 0.0, Parameters()) for ω in ωrange];
+phasep = [phase_phi(ω, 0.1, 0.0, param) for ω in ωrange];
 phasep_sc = first.(phasep);
 phasep_tot = last.(phasep);
 phasep_r = phasep_tot - phasep_sc;
-phases_1 = [phase_sigma(ω, 0.7, 0.0, Parameters()) for ω in ωrange];
+phases_1 = [phase_sigma(ω, 0.7, 0.0, param) for ω in ωrange];
 phases1_sc = first.(phases_1);
 phases1_tot = last.(phases_1);
 phases1_r = phases1_tot - phases1_sc;
-phasep1 = [phase_phi(ω, 0.7, 0.0, Parameters()) for ω in ωrange];
+phasep1 = [phase_phi(ω, 0.7, 0.0, param) for ω in ωrange];
 phasep1_sc = first.(phasep1);
 phasep1_tot = last.(phasep1);
 phasep1_r = phasep1_tot - phasep1_sc;
-phases2 = [phase_sigma(ω, 1.5, 0.0, Parameters()) for ω in ωrange];
+phases2 = [phase_sigma(ω, 1.5, 0.0, param) for ω in ωrange];
 phases2_sc = first.(phases2);
 phases2_tot = last.(phases2);
 phases2_r = phases2_tot - phases2_sc;
-phasep2 = [phase_phi(ω, 1.5, 0.0, Parameters()) for ω in ωrange];
+phasep2 = [phase_phi(ω, 1.5, 0.0, param) for ω in ωrange];
 phasep2_sc = first.(phasep2);
 phasep2_tot = last.(phasep2);
 phasep2_r = phasep2_tot - phasep2_sc;
-phasep3 = [phase_phi(ω, 3.0, 0.0, Parameters()) for ω in ωrange];
+phasep3 = [phase_phi(ω, 3.0, 0.0, param) for ω in ωrange];
 phasep3_sc = first.(phasep3);
 phasep3_tot = last.(phasep3);
 phasep3_r = phasep3_tot - phasep3_sc;
-phases3 = [phase_sigma(ω, 3.0, 0.0, Parameters()) for ω in ωrange];
+phases3 = [phase_sigma(ω, 3.0, 0.0, param) for ω in ωrange];
 phases3_sc = first.(phases3);
 phases3_tot = last.(phases3);
 phases3_r = phases3_tot - phases3_sc;
@@ -45,7 +55,7 @@ phases3_r = phases3_tot - phases3_sc;
         width = "8.4cm",
         xmode = "log",
         xmin = 0.6e-4,
-        xmax = 1.1e6,
+        xmax = 1.5e2,
         xlabel = L"s = \omega^2",
         # ytick = raw"{-3.14, -1.57, 0, 1.57. 2.14}",
         # yticklabels=raw"{$-\pi$, $-\frac{\pi}{2}$, 0, $\frac{\pi}{2}$, $\pi$}",

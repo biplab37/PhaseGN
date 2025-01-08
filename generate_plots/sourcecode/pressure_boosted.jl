@@ -12,28 +12,26 @@ end
 
 function pressure_fluctuation(T, param)
     integrand(x) = delta_integrand(x[1], x[2], T, param)/T^3
-    return PhaseGN.hcubature(integrand, [0.0, 0.0],[sqrt(5)*param.Λ, param.Λ], reltol=1e-1)
+    return PhaseGN.hcubature(integrand, [0.0, 0.0],[6*T, 6*T], reltol=1e-2)
 end
-
-pressure_fluctuation(0.2, Parameters(Λ=5.0))
-
+using ProgressMeter
 function pressure_fluctuations(trange, param)
     pressures = zeros(length(trange))
-    Threads.@threads for i in eachindex(trange)
+    @showprogress Threads.@threads for i in eachindex(trange)
         pressures[i] = pressure_fluctuation(trange[i], param)[1]
     end
     return pressures
 end
 
-trange = range(0.1, 2.0, length=4)
-param = Parameters(Λ=5.0)
+trange = 0.1:0.02:2.0
+param = Parameters()
 
 @time pressures = pressure_fluctuations(trange, param)
 
 plot(trange, pressures, marker=:circle)
 
 writedlm("$(save_dir)/data/pressure_fluctuations.dat", [["# full fluctuation pressure: T" "Pressure/T^3"];trange pressures])
-
+writedlm("pressure_fluctuations.dat", [["# full fluctuation pressure: T" "Pressure/T^3"];trange pressures])
 function phase_zero(ω, T, mu, param)
     impi = imagpart_phi_q(ω, T, mu, 0.0, param)
     repi = Π0_phi(T, mu, param) - PhaseGN.realpart(imagpart_phi_q, ω, T, mu, 0.0, param)
@@ -54,7 +52,8 @@ p = @pgf Axis(
     PlotInc(
         {
             color="black",
-            mark="*",
+            # mark="*",
+            no_marks,
         },
         Table(x=trange, y=pressures)
     ),

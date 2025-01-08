@@ -18,23 +18,25 @@ end
 
 qmott = data[31,2]
 
-q_list = [0.0, 1.5, 10.0]
+q_list = [0.0,1.5,10.0]
 
-threshold_values = [sqrt(4 * σ1(T, 0.0, param)^2 + q^2) for q in q_list]
+# threshold_values = [sqrt(4 * σ1(T, 0.0, param)^2 + q^2) for q in q_list]
 
-ωrange = sort(union(10 .^(-2:0.01:2.5), threshold_values))
+# ωrange = sort(union(10 .^(-2:0.01:2.5), threshold_values))
 
-phases_q = zeros(length(q_list), length(ωrange))
+# phases_q = zeros(length(q_list), length(ωrange))
 
-Threads.@threads for i in eachindex(q_list)
-    phases_q[i, :] = phase_shift_data(ωrange, q_list[i], T, param)
-end
+# Threads.@threads for i in eachindex(q_list)
+#     phases_q[i, :] = phase_shift_data(ωrange, q_list[i], T, param)
+# end
 
-# save data
+# # save data
+# using DelimitedFiles
+# writedlm("$(save_dir)/data/phase_shift_data.dat", [["# T=0.85, ω, q=" q_list...]; ωrange phases_q'], ',')
 using DelimitedFiles
-writedlm("$(save_dir)/data/phase_shift_data.dat", [["# T=0.85, ω, q=" q_list...]; ωrange phases_q'], ',')
-
 data = readdlm("$(save_dir)/data/phase_shift_data.dat", ',', skipstart=1)
+
+ωrange = data[:,1]
 
 boosted_phase_shift = [phase_shift_data(sqrt.(ωrange .^2 .+ q^2), 0.0, T, param) for q in q_list]
 
@@ -51,7 +53,7 @@ p = @pgf Axis(
     },
     Legend(
         ["q=$(q_list[i])M" for i in eachindex(q_list)],
-    )
+    ),
 )
 
 @pgf for i in eachindex(q_list)
@@ -73,9 +75,20 @@ p = @pgf Axis(
     #     },
     #     Table(ωrange.^2, boosted_phase_shift[i])
     # )
-    push!(p, lines)
+    dashes = VLine(
+        {
+            style = "dashed",
+            color = "black",
+            opacity = 0.3
+        },
+        q_list[i]^2 + 4*σ1(T, 0.0, param)^2
+        )
+    push!(p, lines, dashes)
 end
 
 p
-
 pgfsave("$(save_dir)/plots/phase_shift_q_dependence.pdf", p)
+
+# plot(ωrange, phases_q', xaxis=:log, lab=["q=0.0" "q=100M"], legend=:topleft, xlabel=L"\omega^2/M^2", ylabel=L"\phi_{\varphi}(\omega, q)")
+
+# savefig("$(save_dir)/plots/phase_shift_q_dependence_tail.png")

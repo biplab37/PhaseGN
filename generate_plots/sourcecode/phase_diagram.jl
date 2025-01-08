@@ -30,4 +30,4 @@ p = @pgf Axis({
     )
 )
 
-pgfsave("critical_line.svg", p)
+pgfsave("$(save_dir)/plots/5M/critical_line.pdf", p)

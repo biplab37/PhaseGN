@@ -34,4 +34,4 @@ p1 = @pgf Axis(
     HLine({dashed}, 1 / 2)
 )
 
-pgfsave("$(save_dir)/plots/speed_of_sound.pdf", p1)
+pgfsave("$(save_dir)/plots/5M/speed_of_sound.pdf", p1)

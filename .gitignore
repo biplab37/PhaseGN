@@ -6,6 +6,7 @@ docs/build
 paper/
 Session.vim
 .ipynb_checkpoints/
+rough/
 
 *.pdf
 *.png
