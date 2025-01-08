@@ -29,6 +29,19 @@ function pressure_MF(temp, μ, param::Parameters; norm=false::Bool)
     end
 end
 
+function pressure_MF_kappa(temp, μ, param::Parameters; norm=false::Bool)
+    σ₁ = σ1(temp, μ, param)
+    M = param.M
+    σ0 = M * (1 + sqrt(1 + (4 * π * param.κ) / M^2)) / 2
+    temp_independent(s) = (M * s^2 / 2π) - (s^3 / 3π) + param.κ * s
+    temp_dependent = -temp^3 * (σ₁ * (reli2(-exp(-(σ₁ - μ) / temp)) + reli2(-exp(-(σ₁ + μ) / temp))) / temp + reli3(-exp(-(σ₁ - μ) / temp)) + reli3(-exp(-(σ₁ + μ) / temp))) / π
+    if norm
+        return (temp_independent(σ₁) - temp_independent(σ0) + temp_dependent) / temp^3
+    else
+        return temp_dependent
+    end
+end
+
 #TODO: finish the implementation of the mean field approximation at zero chemical potential
 function pressure_MF(temp, param::Parameters; norm=false::Bool)
     return pressure_MF(temp, 0.0, param, norm=norm)
