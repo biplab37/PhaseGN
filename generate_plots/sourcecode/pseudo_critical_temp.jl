@@ -3,18 +3,18 @@ using Plots, PhaseGN, UsefulFunctions, LaTeXStrings
 # scalefontsizes(0.8)
 
 using Roots
-function second_derivative(f, x; dx=2e-2)
+function second_derivative(f, x; dx=5e-2)
     return (f(x + dx) + f(x - dx) - 2 * f(x)) / dx^2
 end
 function sg_filter(f, x; dx=5e-2)
     return (-1 * f(x - 2 * dx) + 16 * f(x - dx) - 30 * f(x) + 16 * f(x + dx) - 1 * f(x + 2 * dx)) / (12 * dx^2)
 end
-function first_derivative(f, x; dx=1e-2)
+function first_derivative(f, x; dx=5e-2)
     return (-2 * f(x - 2 * dx) - f(x + dx) + f(x + dx) + 2 * f(x + 2 * dx)) / (10 * dx)
 end
 
 function pseudo_critical_temp(mu, q, param)
-    der2_mass(t, param) = sg_filter(x -> mass_k(x, mu, q, param), t)
+    der2_mass(t, param) = second_derivative(x -> σ1(x, mu, param), t)
     try
         return find_zero(x -> der2_mass(x, param), (0.1, 1.5))
     catch
@@ -24,13 +24,13 @@ end
 
 param = Parameters(Λ=5.0, κ=0.046)
 param2 = Parameters(Λ=5.0, κ=0.1)
-param3 = Parameters(Λ=5.0, κ=1.0)
+param3 = Parameters(Λ=5.0, κ=.01)
 
 mu_list = 1.12:0.0001:1.13
-mu_list2 = 0.0:0.02:1.25
+mu_list2 = 0.0:0.02:1
 trange = 0.01:0.005:1.2
 
-temperatures = pseudo_critical_temp.(mu_list2, 0.0, param2)
+temperatures = pseudo_critical_temp.(mu_list2, 0.0, param3)
 temperatures2 = pseudo_critical_temp.(mu_list, 0.0, param2)
 plot(temperatures, mu_list2, marker=:circle)
 plot!(temperatures2, mu_list, marker=:circle)
@@ -131,10 +131,10 @@ tr2 = sort(tr)
 
 plot(tr2, mur2, marker=:circle, fontfamily="Computer Modern", boxstyle=:border, lab="", xlabel=L"T/M", ylabel=L"\mu/M", grid=false)
 
-mu_list5 = sort(union(1.13:0.002:1.25, 0.0:0.05:1.0, 1.0:0.01:1.12))
-temperatures3 = pseudo_critical_temp.(mu_list5, 0.0, param2)
+mu_list5 = sort(union(0.9:0.002:1.11, 0.0:0.05:0.9))
+temperatures3 = pseudo_critical_temp.(mu_list5, 0.0, param)
 
-plot(temperatures3[1:end-13], mu_list5[1:end-13])
+plot(temperatures3, mu_list5, marker=:circle)
 scatter!(tr2, mur2, marker=:circle)
 
 tr3 = vcat(tr2, temperatures3[1:end-14])
