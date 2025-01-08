@@ -44,8 +44,4 @@ p1 = @pgf Axis(
     LegendEntry(L"M_\varphi"),
 )
 
-<<<<<<< Updated upstream
 pgfsave("$(save_dir)/plots/5M/exciton_masses.pdf", p1)
-=======
-pgfsave("$(save_dir)/plots/5M/exciton_masses.pdf", p1)
->>>>>>> Stashed changes
