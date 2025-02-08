@@ -3,28 +3,30 @@ using Plots, PhaseGN, UsefulFunctions, LaTeXStrings
 # scalefontsizes(0.8)
 
 using Roots
-function second_derivative(f, x; dx=5e-2)
+function second_derivative(f, x; dx=1e-2)
     return (f(x + dx) + f(x - dx) - 2 * f(x)) / dx^2
 end
 function sg_filter(f, x; dx=5e-2)
     return (-1 * f(x - 2 * dx) + 16 * f(x - dx) - 30 * f(x) + 16 * f(x + dx) - 1 * f(x + 2 * dx)) / (12 * dx^2)
 end
-function first_derivative(f, x; dx=5e-2)
+function first_derivative(f, x; dx=1e-2)
     return (-2 * f(x - 2 * dx) - f(x + dx) + f(x + dx) + 2 * f(x + 2 * dx)) / (10 * dx)
 end
 
 function pseudo_critical_temp(mu, q, param)
-    der2_mass(t, param) = second_derivative(x -> σ1(x, mu, param), t)
+    der2_mass(t, param) = sg_filter(x -> mass_k(x, mu, 0.0, param), t)
     try
-        return find_zero(x -> der2_mass(x, param), (0.1, 1.5))
+        return find_zero(x -> der2_mass(x, param), (0.5, 0.8))
     catch
         return 0.0
     end
 end
 
+pseudo_critical_temp(0.1, 0.0, param)
+
 param = Parameters(Λ=5.0, κ=0.046)
 param2 = Parameters(Λ=5.0, κ=0.1)
-param3 = Parameters(Λ=5.0, κ=.01)
+param3 = Parameters(Λ=5.0, κ=0.01)
 
 mu_list = 1.12:0.0001:1.13
 mu_list2 = 0.0:0.02:1
@@ -65,7 +67,7 @@ plot(tlist, sus)
 
 function all_zeros(mu, param)
     m(temp) = sg_filter(t -> mass_k(t, mu, 0.0, param), temp, dx=5e-2)
-    return reduce_unique(find_zeros(m, 0.11, 0.6))
+    return reduce_unique(find_zeros(m, 0.11, 1.13))
 end
 
 function reduce_unique(list)
@@ -83,13 +85,15 @@ function reduce_unique(list)
 end
 
 
-murange3 = 1.12:0.001:1.15
-all_zeros(1.135, param2)
+murange3 = 1.0:0.001:1.1
+all_zeros(1.10, param)
+
+(1 + sqrt(1 + 4 * π * 0.046)) / 2
 
 data_pseudo_critical = zeros(length(murange3), 3)
 
 Threads.@threads for i in eachindex(murange3)
-    temps = all_zeros(murange3[i], param2)
+    temps = all_zeros(murange3[i], param)
     n = length(temps)
     if n == 2
         data_pseudo_critical[i, 1] = temps[1]
@@ -131,8 +135,8 @@ tr2 = sort(tr)
 
 plot(tr2, mur2, marker=:circle, fontfamily="Computer Modern", boxstyle=:border, lab="", xlabel=L"T/M", ylabel=L"\mu/M", grid=false)
 
-mu_list5 = sort(union(0.9:0.002:1.24, 0.0:0.05:0.9))
-temperatures3 = pseudo_critical_temp.(mu_list5, 0.0, param2)
+mu_list5 = sort(union(0.9:0.002:1.13, 0.0:0.05:0.9))
+temperatures3 = pseudo_critical_temp.(mu_list5, 0.0, param)
 
 plot(temperatures3, mu_list5, marker=:circle)
 scatter!(tr2, mur2, marker=:circle)
@@ -147,10 +151,13 @@ tr4 = sort(tr3)
 
 trange = union(0.1:0.01:0.6, 0.6:0.001:0.725)
 
-mus = [PhaseGN.critical_line(t, param2) for t in trange]
+mus1 = [PhaseGN.critical_line(t, param2) for t in trange]
 
 plot([0.0; tr4], [(1 + sqrt(1 + 4 * π * 0.1)) / 2; mur4])
 plot!([0.0; trange], [1.0; mus])
+
+tr4 = temps
+mur4 = mus
 
 using PGFPlotsX
 
@@ -160,6 +167,7 @@ p1 = @pgf Axis(
         ylabel = L"\mu/M",
         ymin = 0.0,
         xmin = 0.0,
+        legend_pos = "south west"
     },
     PlotInc(
         {
@@ -167,18 +175,18 @@ p1 = @pgf Axis(
             color = "black",
             style = "solid",
         },
-        Table([0.0; trange], [1.0; mus]),
+        Table([0.0; trange], [1.0; mus1]),
     ),
     LegendEntry(L"\kappa=0"),
     PlotInc(
         {
             no_marks,
             color = "black",
-            style = "dashed",
+            style = "dotted",
         },
-        Table([0.0; tr4], [(1 + sqrt(1 + 4 * π * 0.1)) / 2; mur4]),
+        Table([0.0; tr4], [(1 + sqrt(1 + 4 * π * 0.046)) / 2; mur4]),
     ),
-    LegendEntry(L"\kappa=0.1M^2"),
+    LegendEntry(L"\kappa=0.046M^2"),
     # HLine(
     #     {
     #         style = "dotted",
@@ -186,9 +194,15 @@ p1 = @pgf Axis(
     #     },
     #     (1 + sqrt(1 + 4 * π * 0.1)) / 2
     # )
+    Plot(
+        {
+            only_marks,
+        },
+        Table([0.0], [1.0])
+    ),
 )
 
-pgfsave("phase_diagram.svg", p1)
+pgfsave("phase_diagram.pdf", p1)
 
 inset = @pgf Axis(
     {

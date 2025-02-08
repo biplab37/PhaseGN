@@ -7,7 +7,7 @@ using NLsolve: nlsolve
 include("../parameters.jl")
 include("../helperfunction.jl")
 
-include("gapeqns3d.jl")
 include("custom_types.jl")
+include("gapeqns3d.jl")
 
 end
