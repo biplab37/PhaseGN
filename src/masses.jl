@@ -99,18 +99,39 @@ function M_phi(temp, μ, param::Parameters)
     end
 end
 
+function M_phi_bounded(temp, mu, param::Parameters)
+    m = mass_k(temp, mu, 0.0, param)
+    func(ME) = Π0_phi(temp, mu, param) - realpart(imagpart_phi_q_refactored_m, ME, temp, mu, 0.0, m, param)
+    return bisection(func, 0.0, param.M)
+end
+
 function mass_k(temp, μ, k, param)
-    β = 1/temp
-    integrand(m) = m*(m - param.M) - π*param.κ + angular_integral(temp, μ, k, m, param)/2π
-    return bisection(integrand, 0.0, 1.5*param.M)
+    β = 1 / temp
+    integrand(m) = m * (m - param.M) - π * param.κ + angular_integral(temp, μ, k, m, param) / 2π
+    return bisection(integrand, 0.0, 1.5 * param.M)
 end
 
 function angular_integral(temp, μ, k, m, param)
-    β = 1/temp
-    f(sign, x) = numberF(temp, sign*μ, x)
-    ksq(p) = p^2 + k^2/4 + m^2
-    integrand(p, θ) = p*m*(f(+1.0, sqrt(ksq(p) + p*k*cos(θ))) + f(-1.0, sqrt(ksq(p) - p*k*cos(θ))))/sqrt(p^2+m^2)
-    return integrate(x->integrand(x[1], x[2]), [0.0, 0.0], [param.Λ, 2π])
+    β = 1 / temp
+    f(sign, x) = numberF(temp, sign * μ, x)
+    ksq(p) = p^2 + k^2 / 4 + m^2
+    integrand(p, θ) = p * m * (f(+1.0, sqrt(ksq(p) + p * k * cos(θ))) + f(-1.0, sqrt(ksq(p) - p * k * cos(θ)))) / sqrt(p^2 + m^2)
+    return integrate(x -> integrand(x[1], x[2]), [0.0, 0.0], [param.Λ, 2π])
+end
+
+"""
+    find_kappa(cutoff; mp=0.1)
+
+This function finds the value of kappa such that the pseudo scalar mass equals to mp.
+"""
+function find_kappa(cutoff; mp=0.1)
+    func(kappa) = M_phi_bounded(0.01, 0.0, Parameters(Λ=cutoff, κ=kappa)) - mp
+    sol = bisection(func, 0.0, 0.1)
+    if abs(sol) < 1e-4
+        return bisection(func, 0.0, 0.5)
+    else
+        return sol
+    end
 end
 
 export σ1, M_phi, M_sigma, mass_k
