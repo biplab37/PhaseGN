@@ -1,7 +1,7 @@
-trange = union(0.1:0.1:0.6,0.62:0.001:0.8,0.8:0.1:1.5)
+trange = union(0.1:0.1:0.6, 0.62:0.001:0.8, 0.8:0.1:1.5)
 
-function second_derivative(f,x;dx=1e-3)
-    return (f(x+dx) + f(x-dx) - 2f(x))/dx^2
+function second_derivative(f, x; dx=1e-3)
+    return (f(x + dx) + f(x - dx) - 2f(x)) / dx^2
 end
 
 function susceptibility(temp, param)
@@ -20,34 +20,34 @@ sus = susceptibility.(trange, param2)
 
 plot(trange, [m_dt])
 plot(trange, [sus])
-vline!([1/(2log(2))])
+vline!([1 / (2log(2))])
 param
 
-mass_k(0.1+0.01im, 0.0, 0.0, param2)
+mass_k(0.1 + 0.01im, 0.0, 0.0, param2)
 
-ForwardDiff.derivative(x->mass_k(x, 0.0, 0.0, param), 0.01)
+ForwardDiff.derivative(x -> mass_k(x, 0.0, 0.0, param), 0.01)
 
 using PGFPlotsX, LaTeXStrings
 
 p3 = @pgf Axis(
     {
-        xlabel=L"T/M",
-        ylabel=L"\frac{dm}{dT}",
-        xmin=0.1,
-        xmax=1.,
+        xlabel = L"T/M",
+        ylabel = L"\frac{dm}{dT}",
+        xmin = 0.1,
+        xmax = 1.0,
     },
     Plot(
         {
             no_marks,
-            color="black"
+            color = "black"
         },
         Table(trange, m_dt)
     ),
     VLine({
-        style="dashed",
-        opacity=0.5,
-    },
-    1/(2*log(2)))
+            style = "dashed",
+            opacity = 0.5,
+        },
+        1 / (2 * log(2)))
 )
 
-pgfsave("susceptibility.pdf",p3)
+pgfsave("susceptibility.pdf", p3)

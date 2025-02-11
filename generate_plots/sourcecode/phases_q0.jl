@@ -4,7 +4,7 @@
 phase_tot_phi_1 = [delta_phi(ω, 0.0, 0.1, param) for ω in ωrange];
 using Plots
 plot(ωrange, phase_tot_phi_1, xaxis=:log, marker=:circle, xlabel=L"\omega", ylabel=L"\phi_\varphi", label="original")
-vline!([2*m, mm])
+vline!([2 * m, mm])
 
 
 mm = mPhi(0.1, 0.0, param, [0.0, 2.0], m)

@@ -5,7 +5,7 @@ using Roots
 
 function mPhi(temp, μ, param, bracket)
     m = mass_k(temp, μ, 0.0, param)
-    func(ME) =  PhaseGN.realpart_3(PhaseGN.imagpart_phi_q_refactored_m, ME, temp, μ, 0.0, m, param)
+    func(ME) = PhaseGN.realpart_3(PhaseGN.imagpart_phi_q_refactored_m, ME, temp, μ, 0.0, m, param)
     zero_list = find_zeros(func, bracket)
     if length(zero_list) == 0
         return 0.0
@@ -56,7 +56,7 @@ mPhi_q(0.9, 0.0, 1.0, param, [0.0, 3.0], mass_k(0.9, 0.0, 1.0, param))
 
 function mpq(T, q, param;)
     m = mass_k(T, 0.0, q, param)
-    return mPhi_q(T, 0.0, q, param, [0.0, q+1], m)
+    return mPhi_q(T, 0.0, q, param, [0.0, q + 1], m)
 end
 
 param = Parameters(Λ=5.0, κ=kappa01(5.0))
@@ -72,25 +72,25 @@ mpqs .- qrange
 
 thresolds = [sqrt(4 * mass_k(0.9, 0.0, q, param)^2 + q^2) for q in qrange]
 
-plot(qrange, [-mpqs+thresolds], xlabel="q", ylabel="width", title="Width of bound state", lab="")
+plot(qrange, [-mpqs + thresolds], xlabel="q", ylabel="width", title="Width of bound state", lab="")
 savefig("width_of_bound_state.pdf")
 
 ## MOtt momenta
 function mmott_momenta(T, param)
     m(q) = mass_k(T, 0.0, q, param)
     thre_val(q) = sqrt(4 * m(q)^2 + q^2)
-    func(q) = PhaseGN.Π0_phi_m(T, 0.0, m(q), param) -  PhaseGN.realpart(PhaseGN.imagpart_phi_q_refactored_m, thre_val(q), T, 0.0, q, m(q), param)
+    func(q) = PhaseGN.Π0_phi_m(T, 0.0, m(q), param) - PhaseGN.realpart(PhaseGN.imagpart_phi_q_refactored_m, thre_val(q), T, 0.0, q, m(q), param)
     if func(0.0) < 0.0
         return 0.0
     end
-    return PhaseGN.bisection(func, 0.0,3.5)
+    return PhaseGN.bisection(func, 0.0, 3.5)
 end
 
 
 mmott_momenta(0.983, param)
 
-trange = union( 0.85:0.05:0.95, 0.98:0.002:1.0, 1.01:0.05:1.3 )
-trange = union( 0.85:0.05:1.1, 1.102:0.002:1.15, 1.152:0.05:1.4 )
+trange = union(0.85:0.05:0.95, 0.98:0.002:1.0, 1.01:0.05:1.3)
+trange = union(0.85:0.05:1.1, 1.102:0.002:1.15, 1.152:0.05:1.4)
 
 
 Moott_momenta = zeros(length(trange))
@@ -99,11 +99,11 @@ Threads.@threads for i in eachindex(trange)
 end
 
 plot(trange, Moott_momenta, marker=:circle, xlabel="T", ylabel="q", title="Mott momenta", lab="")
-plot!(trange, t->(t<0.98) ? 0.0 : 10*sqrt((t-0.95)^2 - (0.98-0.95)^2))
+plot!(trange, t -> (t < 0.98) ? 0.0 : 10 * sqrt((t - 0.95)^2 - (0.98 - 0.95)^2))
 
 using LsqFit
 
-@. model(x,p) = p[1]*sqrt((x - 0.93)^2 - (0.98 - 0.93)^2) 
+@. model(x, p) = p[1] * sqrt((x - 0.93)^2 - (0.98 - 0.93)^2)
 
 fit = curve_fit(model, trange[5:end], Moott_momenta[5:end], [10, 0.98])
 
@@ -111,13 +111,13 @@ fit.param
 
 savefig("mott_momenta.pdf")
 
-plot!(0.98:0.01:1.5, x->10*(x- 0.98), lab="")
+plot!(0.98:0.01:1.5, x -> 10 * (x - 0.98), lab="")
 
 mPhi(0.95, 0.0, param, [0.0, 2.0])
-2*mass_k(0.95, 0.0,0.0, param)
+2 * mass_k(0.95, 0.0, 0.0, param)
 
-fitcurve = map(x->(x<0.98 ? 0.0 : 5*(x^1.5 - 0.98^1.5)^(2/3)), trange)
-fitcurve2 = map(x->(x<0.98 ? 0.0 : 10*sqrt((x-0.95)^2 - (0.98 - 0.95)^2)), trange)
+fitcurve = map(x -> (x < 0.98 ? 0.0 : 5 * (x^1.5 - 0.98^1.5)^(2 / 3)), trange)
+fitcurve2 = map(x -> (x < 0.98 ? 0.0 : 10 * sqrt((x - 0.95)^2 - (0.98 - 0.95)^2)), trange)
 plot!(trange, fitcurve2, lab="fit curve")
 
 using PGFPlotsX
@@ -128,9 +128,7 @@ p2 = @pgf Axis(
         xmin = 0.82,
         # xmax = 1.51,
         ymin = -0.2,
-        legend_pos = "north west",
-
-    },
+        legend_pos = "north west",},
     PlotInc(
         {
             # no_marks,
@@ -138,9 +136,9 @@ p2 = @pgf Axis(
             mark = "o",
             color = "black",
             style = "solid",
-            mark_options = {scale=0.75}
+            mark_options = {scale = 0.75}
         },
-        Table(x = trange, y = Moott_momenta)
+        Table(x=trange, y=Moott_momenta)
     ),
     LegendEntry("Mott momenta"),
     PlotInc(
@@ -150,7 +148,7 @@ p2 = @pgf Axis(
             color = "black",
             style = "dashed",
         },
-        Table(x = trange, y = fitcurve2)
+        Table(x=trange, y=fitcurve2)
     ),
     LegendEntry("Fit curve"),
 )
@@ -170,7 +168,7 @@ mPhi_q(0.93, 0.0, 0.0, param, [0.0, 2.0], mass_k(0.93, 0.0, 0.0, param)) - 2 * m
 function delta_phi(ω, q, T, param)
     m = mass_k(T, 0.0, q, param)
     impi = PhaseGN.imagpart_phi_q_refactored_m(ω, T, 0.0, q, m, param)
-    repi = Π0_phi(T, 0.0,param) -  PhaseGN.realpart(PhaseGN.imagpart_phi_q_refactored_m, ω, T, 0.0, q, m, param)
+    repi = Π0_phi(T, 0.0, param) - PhaseGN.realpart(PhaseGN.imagpart_phi_q_refactored_m, ω, T, 0.0, q, m, param)
     return atan(impi, repi)
 end
 
@@ -195,15 +193,15 @@ end
 
 function Mphi_plot(temp, μ, param)
     m = mass_k(temp, μ, 0.0, param)
-    func(ME) =  PhaseGN.realpart_3(PhaseGN.imagpart_phi_q_refactored_m, ME, temp, μ, 0.0, m, param)
+    func(ME) = PhaseGN.realpart_3(PhaseGN.imagpart_phi_q_refactored_m, ME, temp, μ, 0.0, m, param)
     mrange = 0.0:0.001:3.0
     plot(mrange, func, lab="", xlims=(0.0, 3.0), ylims=(-0.15, 0.15), xlabel=L"\omega", fontfamily="Computer Modern", ylabel=L"Re$\Pi_\varphi(0, \omega)$")
     # vline!([2*m])
 end
 
 Mphi_plot(1.02, 0.0, param)
-    mPhi_s(0.93, 0.0, param, [0.0, 2.0])
-2*mass_k(0.92, 0.0, 0.0, param)
+mPhi_s(0.93, 0.0, param, [0.0, 2.0])
+2 * mass_k(0.92, 0.0, 0.0, param)
 
 mPhi(0.92, 0.0, param, [0.0, 2.0])
 
@@ -211,20 +209,20 @@ kappa01(5.0)
 
 function mPhi_2(temp, μ, param, guess)
     m = mass_k(temp, μ, 0.0, param)
-    func(ME) =  PhaseGN.realpart_3(PhaseGN.imagpart_phi_q_refactored_m, ME, temp, μ, 0.0, m, param)
+    func(ME) = PhaseGN.realpart_3(PhaseGN.imagpart_phi_q_refactored_m, ME, temp, μ, 0.0, m, param)
     return find_zero(func, guess)
 end
 
 function mPhi_s2(temp, μ, param)
     m = mass_k(temp, μ, 0.0, param)
-    func(ME) =  PhaseGN.realpart_3(PhaseGN.imagpart_phi_q_refactored_m, ME, temp, μ, 0.0, m, param)
+    func(ME) = PhaseGN.realpart_3(PhaseGN.imagpart_phi_q_refactored_m, ME, temp, μ, 0.0, m, param)
     return find_zeros(func, 0.1, 3.0)
 end
 
 
 mPhi_s(1.02, 0.0, param)
 
-2*mass_k(0.9805, 0.0, 0.0, param)
+2 * mass_k(0.9805, 0.0, 0.0, param)
 
 ## create animation for t with Mphi_plot
 
@@ -235,4 +233,4 @@ anim = @animate for t in 0.85:0.01:1.1
     title!("T = $t M")
 end
 
-gif(anim, "Mphi_plot.gif", fps = 2)
+gif(anim, "Mphi_plot.gif", fps=2)

@@ -3,7 +3,7 @@ using PhaseGN, Plots
 function delta_phi(ω, q, T, param)
     m = mass_k(T, 0.0, q, param)
     impi = PhaseGN.imagpart_phi_q_refactored_m(ω, T, 0.0, q, m, param)
-    repi = Π0_phi(T, 0.0,param) -  PhaseGN.realpart(PhaseGN.imagpart_phi_q_refactored_m, ω, T, 0.0, q, m, param)
+    repi = Π0_phi(T, 0.0, param) - PhaseGN.realpart(PhaseGN.imagpart_phi_q_refactored_m, ω, T, 0.0, q, m, param)
     return atan(impi, repi)
 end
 
@@ -12,7 +12,7 @@ function phase_shifts(ωrange, q, T, param)
 end
 
 function boosted_phase_shifts(ωrange, q, T, param)
-    ωrange2 = map(x->(x<=q) ? 0.0 : sqrt(x^2 - q^2), ωrange)
+    ωrange2 = map(x -> (x <= q) ? 0.0 : sqrt(x^2 - q^2), ωrange)
     return delta_phi.(ωrange2, 0.0, T, param)
 end
 
@@ -40,8 +40,8 @@ plot(ωrange, [integrand_full integrand_boosted], label=["full" "boosted"], xaxi
 
 
 function boosted_fixed_pressure(phi, temp, mu, param)
-    func(s) = (log((1 - exp(sqrt(param.Λ^2+s)/temp))/(1 - exp(sqrt(s)/temp)))*temp - (sqrt(param.Λ^2+s) - sqrt(s)))*phi(sqrt(s), temp, mu, param)/(8*π^2*temp^3)
-    return PhaseGN.integrate(func, 0.0, 5*param.Λ^2)
+    func(s) = (log((1 - exp(sqrt(param.Λ^2 + s) / temp)) / (1 - exp(sqrt(s) / temp))) * temp - (sqrt(param.Λ^2 + s) - sqrt(s))) * phi(sqrt(s), temp, mu, param) / (8 * π^2 * temp^3)
+    return PhaseGN.integrate(func, 0.0, 5 * param.Λ^2)
 end
 
 phi_zero(ω, temp, mu, param) = delta_phi(ω, 0.0, temp, param)
@@ -86,24 +86,24 @@ gp1 = @pgf GroupPlot(
         {
             no_marks,
         },
-        Table(x = ωrange.^2, y = phase_shift_dat1)
+        Table(x=ωrange .^ 2, y=phase_shift_dat1)
     ),
     Plot(
         {
             no_marks,
         },
-        Table(x = ωrange.^2, y = phase_shift_dat1)
+        Table(x=ωrange .^ 2, y=phase_shift_dat1)
     ),
     Plot(
         {
             no_marks,
         },
-        Table(x = ωrange.^2, y = phase_shift_dat1)
+        Table(x=ωrange .^ 2, y=phase_shift_dat1)
     ),
     Plot(
         {
             no_marks,
         },
-        Table(x = ωrange.^2, y = phase_shift_dat1)
+        Table(x=ωrange .^ 2, y=phase_shift_dat1)
     )
 )

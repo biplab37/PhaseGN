@@ -5,7 +5,7 @@ param = Parameters(Λ=5.0, κ=0.045)
 function delta_phi(ω, q, T, param)
     m = mass_k(T, 0.0, q, param)
     impi = PhaseGN.imagpart_phi_q_refactored_m(ω, T, 0.0, q, m, param)
-    repi = - PhaseGN.realpart(PhaseGN.imagpart_phi_q_refactored_m, ω, T, 0.0, q, m, param)
+    repi = -PhaseGN.realpart(PhaseGN.imagpart_phi_q_refactored_m, ω, T, 0.0, q, m, param)
     fullrepi = repi + Π0_phi(T, 0.0, param)
     ph_r = -atan(impi, -repi)
     ph_tot = atan(impi, fullrepi)
@@ -16,7 +16,7 @@ end
 function delta_sigma(ω, q, T, param)
     m = mass_k(T, 0.0, q, param)
     impi = PhaseGN.imagpart_sigma_q_refactored_m(ω, T, 0.0, q, m, param)
-    repi = - PhaseGN.realpart(PhaseGN.imagpart_sigma_q_refactored_m, ω, T, 0.0, q, m, param)
+    repi = -PhaseGN.realpart(PhaseGN.imagpart_sigma_q_refactored_m, ω, T, 0.0, q, m, param)
     fullrepi = repi + Π0_sigma(T, 0.0, param)
     ph_r = -atan(impi, -repi)
     ph_tot = atan(impi, fullrepi)
@@ -27,7 +27,7 @@ end
 delta_phi(4.0, 1.0, 0.1, param)
 delta_sigma(4.0, 1.0, 0.1, param)
 
-ωrange = 10 .^(range(-2, stop=1.2, length=200))
+ωrange = 10 .^ (range(-2, stop=1.2, length=200))
 
 t_list = [0.1, 0.7, 1.0, 2.0]
 phases_k = zeros(length(ωrange), length(t_list), 3)
@@ -76,25 +76,25 @@ end
         {
             no_marks,
         },
-        Table(ωrange .^ 2, phases_k_sigma[:,1,1])
+        Table(ωrange .^ 2, phases_k_sigma[:, 1, 1])
     ),
     PlotInc(
         {
             no_marks,
         },
-        Table(ωrange .^ 2, phases_k_sigma[:,2,1])
+        Table(ωrange .^ 2, phases_k_sigma[:, 2, 1])
     ),
     PlotInc(
         {
             no_marks,
         },
-        Table(ωrange .^ 2, phases_k_sigma[:,3,1])
+        Table(ωrange .^ 2, phases_k_sigma[:, 3, 1])
     ),
     PlotInc(
         {
             no_marks,
         },
-        Table(ωrange .^ 2, phases_k_sigma[:,4,1])
+        Table(ωrange .^ 2, phases_k_sigma[:, 4, 1])
     ),
     {
         ylabel = L"\phi_{\varphi, \rm{r}}",
@@ -137,28 +137,28 @@ end
         {
             no_marks,
         },
-        Table(ωrange .^ 2, phases_k_sigma[:,1,2])
+        Table(ωrange .^ 2, phases_k_sigma[:, 1, 2])
     ),
     LegendEntry(L"T = 0.0"),
     PlotInc(
         {
             no_marks,
         },
-        Table(ωrange .^ 2, phases_k_sigma[:,2,2])
+        Table(ωrange .^ 2, phases_k_sigma[:, 2, 2])
     ),
     LegendEntry(L"T = 0.7M"),
     PlotInc(
         {
             no_marks,
         },
-        Table(ωrange .^ 2, phases_k_sigma[:,3,2])
+        Table(ωrange .^ 2, phases_k_sigma[:, 3, 2])
     ),
     LegendEntry(L"T = 1.0M"),
     PlotInc(
         {
             no_marks,
         },
-        Table(ωrange .^ 2, phases_k_sigma[:,4,2])
+        Table(ωrange .^ 2, phases_k_sigma[:, 4, 2])
     ),
     LegendEntry(L"T = 2.0M"),
     {
@@ -202,25 +202,25 @@ end
         {
             no_marks,
         },
-        Table(ωrange .^ 2, phases_k_sigma[:,1,3])
+        Table(ωrange .^ 2, phases_k_sigma[:, 1, 3])
     ),
     PlotInc(
         {
             no_marks,
         },
-        Table(ωrange .^ 2, phases_k_sigma[:,2,3])
+        Table(ωrange .^ 2, phases_k_sigma[:, 2, 3])
     ),
     PlotInc(
         {
             no_marks,
         },
-        Table(ωrange .^ 2, phases_k_sigma[:,3,3])
+        Table(ωrange .^ 2, phases_k_sigma[:, 3, 3])
     ),
     PlotInc(
         {
             no_marks,
         },
-        Table(ωrange .^ 2, phases_k_sigma[:,4,3])
+        Table(ωrange .^ 2, phases_k_sigma[:, 4, 3])
     ),
     {
         ylabel = L"\phi_{\varphi, \rm{tot}}",

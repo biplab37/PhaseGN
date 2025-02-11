@@ -7,12 +7,12 @@ function delta_phi(ω, q, T, param)
 end
 
 function delta_integrand(ω, q, T, param)
-    return delta_phi(ω, q, T, param)*q/((exp(ω/T) - 1.0)*2π^2)
+    return delta_phi(ω, q, T, param) * q / ((exp(ω / T) - 1.0) * 2π^2)
 end
 
 function pressure_fluctuation(T, param)
-    integrand(x) = delta_integrand(x[1], x[2], T, param)/T^3
-    return PhaseGN.hcubature(integrand, [0.0, 0.0],[10*T, 10*T], abstol=1e-3)
+    integrand(x) = delta_integrand(x[1], x[2], T, param) / T^3
+    return PhaseGN.hcubature(integrand, [0.0, 0.0], [10 * T, 10 * T], abstol=1e-3)
 end
 
 
@@ -32,4 +32,4 @@ param = Parameters()
 @time pressures = pressure_fluctuations(trange, param)
 
 using DelimitedFiles
-writedlm("pressure_fluc_with_k2.dat", [["# full fluctuation pressure: T" "Pressure/T^3"];trange pressures])
+writedlm("pressure_fluc_with_k2.dat", [["# full fluctuation pressure: T" "Pressure/T^3"]; trange pressures])

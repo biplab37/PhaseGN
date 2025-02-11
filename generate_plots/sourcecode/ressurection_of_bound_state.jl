@@ -16,9 +16,9 @@ function phase_shift_data(ωrange, q, T, param)
     return phase_shift
 end
 
-qmott = data[31,2]
+qmott = data[31, 2]
 
-q_list = [0.0,1.5,10.0]
+q_list = [0.0, 1.5, 10.0]
 
 # threshold_values = [sqrt(4 * σ1(T, 0.0, param)^2 + q^2) for q in q_list]
 
@@ -36,19 +36,19 @@ q_list = [0.0,1.5,10.0]
 using DelimitedFiles
 data = readdlm("$(save_dir)/data/phase_shift_data.dat", ',', skipstart=1)
 
-ωrange = data[:,1]
+ωrange = data[:, 1]
 
-boosted_phase_shift = [phase_shift_data(sqrt.(ωrange .^2 .+ q^2), 0.0, T, param) for q in q_list]
+boosted_phase_shift = [phase_shift_data(sqrt.(ωrange .^ 2 .+ q^2), 0.0, T, param) for q in q_list]
 
 p = @pgf Axis(
     {
         xlabel = L"\omega^2",
         ylabel = L"\phi_{\varphi}(\omega, q)",
         xmode = "log",
-        xmin=0.005,
-        xmax=250.0^2,
-        ymin=-0.1,
-        ytick = [0, pi/2, pi],
+        xmin = 0.005,
+        xmax = 250.0^2,
+        ymin = -0.1,
+        ytick = [0, pi / 2, pi],
         yticklabels = ["0", L"\frac{\pi}{2}", L"\pi"],
     },
     Legend(
@@ -64,7 +64,7 @@ p = @pgf Axis(
             style = "solid",
             # legend_entry = LaTeXString("q = $(q_list[i])")
         },
-        Table(data[:,1].^2, data[:,i+1])
+        Table(data[:, 1] .^ 2, data[:, i+1])
     )
     # boosted = PlotInc(
     #     {
@@ -81,8 +81,8 @@ p = @pgf Axis(
             color = "black",
             opacity = 0.3
         },
-        q_list[i]^2 + 4*σ1(T, 0.0, param)^2
-        )
+        q_list[i]^2 + 4 * σ1(T, 0.0, param)^2
+    )
     push!(p, lines, dashes)
 end
 

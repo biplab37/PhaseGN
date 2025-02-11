@@ -3,7 +3,7 @@ using PhaseGN, PGFPlotsX, LaTeXStrings
 function delta_sigma(ω, q, T, param)
     m = mass_k(T, 0.0, q, param)
     impi = PhaseGN.imagpart_sigma_q_refactored_m(ω, T, 0.0, q, m, param)
-    repi = Π0_sigma(T, 0.0,param) -  PhaseGN.realpart(PhaseGN.imagpart_sigma_q_refactored_m, ω, T, 0.0, q, m, param)
+    repi = Π0_sigma(T, 0.0, param) - PhaseGN.realpart(PhaseGN.imagpart_sigma_q_refactored_m, ω, T, 0.0, q, m, param)
     return atan(impi, repi)
 end
 
@@ -24,12 +24,12 @@ function kappa01(Λ)
 end
 
 function delta_integrand(ω, q, T, param)
-    return delta_sigma(ω, q, T, param)*q/((exp(ω/T) - 1.0)*2π^2)
+    return delta_sigma(ω, q, T, param) * q / ((exp(ω / T) - 1.0) * 2π^2)
 end
 
 function pressure_fluctuation(T, param)
-    integrand(x) = delta_integrand(x[1], x[2], T, param)/T^3
-    return PhaseGN.hcubature(integrand, [0.0, 0.0],[min(10*T, sqrt(5)*param.Λ), min(10*T, param.Λ)], reltol=1e-1)
+    integrand(x) = delta_integrand(x[1], x[2], T, param) / T^3
+    return PhaseGN.hcubature(integrand, [0.0, 0.0], [min(10 * T, sqrt(5) * param.Λ), min(10 * T, param.Λ)], reltol=1e-1)
 end
 param = Parameters(Λ=5.0, κ=kappa01(5.0))
 

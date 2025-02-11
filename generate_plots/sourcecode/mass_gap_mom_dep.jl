@@ -27,22 +27,22 @@ p = @pgf Axis(
         xlabel = L"T/M",
         ylabel = L"m/M",
         xmin = 0.0,
-        xmax=2.0,
-        ymin=0.0,
+        xmax = 2.0,
+        ymin = 0.0,
     },
     PlotInc(
         {
-            color="black",
+            color = "black",
             # mark="*",
             no_marks,
-            style="dotted"
+            style = "dotted"
         },
         Table(x=trange, y=masses_k0[1, :])
     ),
     LegendEntry(L"m_0=0"),
     PlotInc(
         {
-            color="black",
+            color = "black",
             # mark="*",
             no_marks,
         },
@@ -51,28 +51,26 @@ p = @pgf Axis(
     LegendEntry("q=0"),
     PlotInc(
         {
-            color="black",
+            color = "black",
             # mark="*",
             no_marks,
-            style="dashed",
+            style = "dashed",
         },
         Table(x=trange, y=masses_k[2, :])
     ),
     LegendEntry("q=2.5M"),
     PlotInc(
         {
-            color="black",
+            color = "black",
             # mark="*",
             no_marks,
-            style="dashdotted",
+            style = "dashdotted",
         },
         Table(x=trange, y=masses_k[3, :])
     ),
-    LegendEntry("q=5M"),
+    LegendEntry("q=5M"),)
 
-)
-
-1/(2log(2))
+1 / (2log(2))
 
 pgfsave("mass_gap_momentum_dep.svg", p)
 

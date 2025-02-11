@@ -21,25 +21,25 @@ writedlm("$(save_dir)/data/phase_q.dat", [ωrange phases_phi])
 
 
 ωlist = collect(ωrange)
-ωbox = [[ωlist[1]]; ωlist ; [ωlist[end]]]
+ωbox = [[ωlist[1]]; ωlist; [ωlist[end]]]
 
 axis = @pgf Axis(
     {
-        set_layers,
-        xmode = "log",
-        view = "{-40}{25}",
-        zmin = 0,
-        zmax= 3.2,
-        ymin = 0.25,
-        ymax = 1.6,
-        y_dir = "reverse",
-        ytick = collect(tlist[3:2:end]),
-        zticklabels = ["0",L"\pi/2", L"\pi"],
-        ztick = [0,pi/2,pi],
-        xlabel = L"\omega",
-        ylabel = L"T/M",
-        zlabel = L"\phi_\varphi"
-    },
+    set_layers,
+    xmode = "log",
+    view = "{-40}{25}",
+    zmin = 0,
+    zmax = 3.2,
+    ymin = 0.25,
+    ymax = 1.6,
+    y_dir = "reverse",
+    ytick = collect(tlist[3:2:end]),
+    zticklabels = ["0", L"\pi/2", L"\pi"],
+    ztick = [0, pi / 2, pi],
+    xlabel = L"\omega",
+    ylabel = L"T/M",
+    zlabel = L"\phi_\varphi"
+},
 )
 
 @pgf for i in 3:2:15
@@ -47,12 +47,12 @@ axis = @pgf Axis(
         {
             no_marks,
             style = {thick},
-            color= "black"
+            color = "black"
         },
         Table(
-            x = collect(ωrange),
-            y = tlist[i]*ones(length(ωrange)),
-            z = phases_phi[:,i] 
+            x=collect(ωrange),
+            y=tlist[i] * ones(length(ωrange)),
+            z=phases_phi[:, i]
         )
     )
     fill = Plot3(
@@ -62,9 +62,9 @@ axis = @pgf Axis(
             fill_opacity = 0.15
         },
         Table(
-            x = ωbox,
-            y = tlist[i]*ones(length(ωbox)),
-            z = [[0]; phases_phi[:,i]; [0]]
+            x=ωbox,
+            y=tlist[i] * ones(length(ωbox)),
+            z=[[0]; phases_phi[:, i]; [0]]
         )
     )
     push!(axis, curve, fill)

@@ -2,8 +2,8 @@ using PhaseGN, PGFPlotsX, LaTeXStrings, DelimitedFiles
 
 data = readdlm("pressure_fluctuations.dat", skipstart=1)
 
-trange = data[:,1]
-press = data[:,2]
+trange = data[:, 1]
+press = data[:, 2]
 
 plot(trange, press, marker=:circle, xlabel=L"T/M", ylabel=L"P/T^3")
 
@@ -34,7 +34,7 @@ end
 
 function pole_approx_2(T, param)
     Mphi = M_phi(T, 0.0, param)
-    integrand(q) = -q*log(1 - exp(-sqrt(q^2 + Mphi^2)/T))/(2π*T^2)
+    integrand(q) = -q * log(1 - exp(-sqrt(q^2 + Mphi^2) / T)) / (2π * T^2)
     return PhaseGN.integrate(integrand, 0.0, param.Λ)
 end
 
@@ -46,7 +46,7 @@ end
 
 plot!(trange, pressure_boost, label="boost")
 plot!(trange, pressure_pole, label="Pole approx")
-plot!(trange, 2*pressure_pole_2, label="Pole approx 2")
+plot!(trange, 2 * pressure_pole_2, label="Pole approx 2")
 
 p_pole = @pgf Axis(
     {
@@ -54,12 +54,12 @@ p_pole = @pgf Axis(
         ylabel = L"P/T^3",
         xmin = 0.0,
         xmax = 1.6,
-        ymin=0.0,
+        ymin = 0.0,
         # ymax = 0.35,
     },
     PlotInc(
         {
-            color="black",
+            color = "black",
             no_marks,
         },
         Table(x=trange, y=press)
@@ -67,20 +67,20 @@ p_pole = @pgf Axis(
     LegendEntry("Full"),
     PlotInc(
         {
-            color="black",
+            color = "black",
             no_marks,
-            style="dashed",
+            style = "dashed",
         },
         Table(x=trange, y=pressure_boost)
     ),
     LegendEntry("Boost"),
     PlotInc(
         {
-            color="black",
+            color = "black",
             no_marks,
-            style="dotted",
+            style = "dotted",
         },
-        Table(x=trange, y=2*pressure_pole_2)
+        Table(x=trange, y=2 * pressure_pole_2)
     ),
     LegendEntry("Pole"),
 )

@@ -53,7 +53,7 @@ q_list = [0.0, 1.0, 2.0]
 
 threshold_values = [sqrt(4 * mass_k(T, 0.0, q, param)^2 + q^2) for q in q_list]
 
-ωrange = sort(union(10 .^(-2:0.1:1.), threshold_values, [q-0.1:0.01:q+0.2 for q in q_list[2:end]]...))
+ωrange = sort(union(10 .^ (-2:0.1:1.0), threshold_values, [q-0.1:0.01:q+0.2 for q in q_list[2:end]]...))
 
 phases_q = zeros(length(q_list), length(ωrange))
 using ProgressMeter
@@ -75,13 +75,13 @@ phases_q0 = zeros(length(q_list), length(ωrange2))
 end
 
 
-plot(ωrange.^2 , phases_q[1, :], xlabel=L"s=\omega^2 - q^2", ylabel=L"\phi_\varphi", label="q=0.0")
-plot!(ωrange.^2 .- q_list[2]^2 , phases_q[2, :], label="q=2.0")
-plot!(ωrange.^2 .- q_list[3]^2 , phases_q[3, :], label="q=5.0", xlims=(0.0, 25.0))
+plot(ωrange .^ 2, phases_q[1, :], xlabel=L"s=\omega^2 - q^2", ylabel=L"\phi_\varphi", label="q=0.0")
+plot!(ωrange .^ 2 .- q_list[2]^2, phases_q[2, :], label="q=2.0")
+plot!(ωrange .^ 2 .- q_list[3]^2, phases_q[3, :], label="q=5.0", xlims=(0.0, 25.0))
 savefig("phase_shift_with_mom_dep_mass_gap.pdf")
 
 
-plot(ωrange2.^2 , phases_q0[1, :], xlabel=L"s=\omega^2 - q^2", ylabel=L"\phi_\varphi", label="q=0.0")
-plot!(ωrange2.^2 .- q_list[2]^2 , phases_q0[2, :], label="q=2M")
-plot!(ωrange2.^2 .- q_list[3]^2 , phases_q0[3, :], label="q=5M")
+plot(ωrange2 .^ 2, phases_q0[1, :], xlabel=L"s=\omega^2 - q^2", ylabel=L"\phi_\varphi", label="q=0.0")
+plot!(ωrange2 .^ 2 .- q_list[2]^2, phases_q0[2, :], label="q=2M")
+plot!(ωrange2 .^ 2 .- q_list[3]^2, phases_q0[3, :], label="q=5M")
 savefig("phase_shift_without_momentum_dependent_mass_gap_.pdf")

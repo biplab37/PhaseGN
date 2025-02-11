@@ -35,5 +35,5 @@ p1 = @pgf Axis(
     #     Table(trange, model.(trange))
     # ),
     # LegendEntry(L"\sqrt{2(T^2 - T_{\rm Mott}^2)}")
-    )
+)
 pgfsave("$(save_dir)/plots/mott_momentas_new.pdf", p1)

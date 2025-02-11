@@ -8,19 +8,19 @@ function plot_omega_kappa(T, mu, param)
     plot(σrange, omega_kappa, label="T=$T, μ=$mu", xlabel=L"\sigma", ylabel=L"\Omega(\sigma, T, \mu)", legend=:topleft)
 end
 
-plot_omega_kappa(0.01, 1., param)
+plot_omega_kappa(0.01, 1.0, param)
 
 Trange = 0.01:0.01:1.3
 murange = 0.0:0.01:1.3
 
 phase_diag = zeros(length(Trange), length(murange))
-    
+
 Threads.@threads for i in eachindex(Trange)
     for j in eachindex(murange)
         phase_diag[i, j] = PhaseGN.mass_k(Trange[i], murange[j], 0.0, param)
     end
 end
-    plotly()
+plotly()
 surface(Trange, murange, phase_diag, xlabel=L"T", ylabel=L"\mu", title="Phase diagram", legend=:topleft)
 
 σrange = -2.0:0.01:2.0
