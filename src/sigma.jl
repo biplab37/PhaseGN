@@ -35,7 +35,6 @@ function Π0_sigma(temp, μ, param)
 end
 
 function Π0_sigma_m(temp, μ, m, param)
-    m = σ1(temp, μ, param)
     Ep(p) = sqrt(p^2 + m^2)
     integrand(p) = 1 / π - p * (p^2 / Ep(p)^2) * (1 - numberF(temp, -μ, Ep(p)) - numberF(temp, μ, Ep(p))) / (π * Ep(p))
     return -1 / π + integrate(integrand, 0.0, param.Λ)
