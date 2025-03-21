@@ -30,5 +30,6 @@ include("mott.jl")
 # include("phase_transition_order.jl")
 
 include("3D/3d.jl")
+include("Spectral/spectral.jl")
 
 end
