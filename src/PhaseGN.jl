@@ -31,5 +31,6 @@ include("mott.jl")
 
 include("3D/3d.jl")
 include("Spectral/spectral.jl")
+include("Spectral/plasmon.jl")
 
 end
