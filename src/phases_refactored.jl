@@ -9,3 +9,5 @@ end
 
 phase_shift_phi(ω, q, T, mu, param) = phase_shift(imagpart_phi_q_refactored_m, Π0_phi, mass_k, ω, q, T, mu, param)
 phase_shift_sigma(ω, q, T, mu, param) = phase_shift(imagpart_sigma_q_refactored_m, Π0_sigma, mass_k, ω, q, T, mu, param)
+
+export phase_shift_phi, phase_shift_sigma
