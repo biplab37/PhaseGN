@@ -5,10 +5,11 @@ This module contains many of the functions related to the calculation of various
 """
 module PhaseGN
 
-using UsefulFunctions: PVintegral
+using UsefulFunctions: PVintegral, numberB
 using Cubature, PolyLog
 using NLsolve: nlsolve
 using RecipesBase
+using Interpolations
 
 include("parameters.jl")
 include("helperfunction.jl")
@@ -28,6 +29,7 @@ include("phase_defn.jl")
 include("momentum_effect_on_pressure.jl")
 include("mott.jl")
 # include("phase_transition_order.jl")
+include("interpolated_functions.jl")
 
 include("3D/3d.jl")
 include("Spectral/spectral.jl")

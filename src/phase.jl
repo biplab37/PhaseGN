@@ -23,6 +23,13 @@ function realpart(imagpart::Function, ω, T, μ, q, m, param::Parameters)
     return integrate(integrand, 0.0, cutoff)
 end
 
+# only takes 2 dimensional function as inputs
+function realpart_with2args(imagpart::Function, ω, q, m, param::Parameters)
+    cutoff = 2*sqrt(param.Λ^2 + q^2/4 + m^2)
+    integrand(ν) = 2 * ν * (imagpart(ν, q) * PrincipalValue(ν^2 - ω^2) - imagpart(ν, 0.0) * PrincipalValue(ν^2)) / π
+    return integrate(integrand, 0.0, cutoff)
+end
+
 function realpart_k(imagpart::Function, ω, T, μ, q, param)
     m = mass_k(T, μ, q, param)
     cutoff = 2*sqrt(param.Λ^2 + q^2/4 + m^2)
