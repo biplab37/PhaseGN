@@ -1,6 +1,6 @@
 using PhaseGN, PGFPlotsX, LaTeXStrings
 
-param = Parameters(Λ=5.0, κ=kappa01(5.0))
+param = Parameters(Λ=5.0, κ=0.046)
 
 function delta_phi(ω, q, T, param)
     m = mass_k(T, 0.0, q, param)
@@ -45,6 +45,8 @@ Threads.@threads for i in eachindex(ωrange)
         phases_k_sigma[i, j, :] = delta_sigma(ωrange[i], 0.0, t_list[j], param)
     end
 end
+
+writedlm("fig_5_phases_q0.csv", hcat(ωrange, phases_k[:, 1, 1], phases_k[:, 1, 2], phases_k[:, 1, 3], phases_k[:, 2, 1], phases_k[:, 2, 2], phases_k[:, 2, 3],phases_k[:, 3, 1], phases_k[:, 3, 2], phases_k[:, 3, 3], phases_k[:, 4, 1], phases_k[:, 4, 2], phases_k[:, 4, 3], phases_k_sigma[:, 1, 1], phases_k_sigma[:, 1, 2], phases_k_sigma[:, 1, 3], phases_k_sigma[:, 2, 1], phases_k_sigma[:, 2, 2], phases_k_sigma[:, 2, 3],phases_k_sigma[:, 3, 1], phases_k_sigma[:, 3, 2], phases_k_sigma[:, 3, 3], phases_k_sigma[:, 4, 1], phases_k_sigma[:, 4, 2], phases_k_sigma[:, 4, 3]), ',')
 
 @pgf gp = GroupPlot(
     {

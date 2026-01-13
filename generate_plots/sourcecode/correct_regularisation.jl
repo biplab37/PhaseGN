@@ -3,7 +3,7 @@ using PhaseGN
 using Plots
 
 function omega(s, temp, μ, param)
-    term_ind = abs(s)^3 / (3 * π) - s^2 * param.M / (2 * π) #- param.κ * s - s^4 / (8 * π * param.Λ)
+    term_ind = abs(s)^3 / (3 * π) - s^2 * param.M / (2 * π) - param.κ * s - s^4 / (8 * π * param.Λ)
     σ₁ = abs(s)
     term_dep = temp^3 * (σ₁ * (PhaseGN.reli2(-exp(-(σ₁ - μ) / temp)) + PhaseGN.reli2(-exp(-(σ₁ + μ) / temp))) / temp + PhaseGN.reli3(-exp(-(σ₁ - μ) / temp)) + PhaseGN.reli3(-exp(-(σ₁ + μ) / temp))) / π
     correction_term = temp^3 * (-PhaseGN.reli3(-exp(μ / temp)) - PhaseGN.reli3(-exp(-μ / temp))) / π

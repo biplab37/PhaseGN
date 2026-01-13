@@ -64,7 +64,7 @@ musmu = find_pseudo_crit_mu2.(trangemu, param)
 
 trange = union(0.14:0.01:0.7, 0.71:0.001:0.8)
 mus = find_pseudo_crit_mu.(trange, param)
-trange2 = 0.05:0.01:0.19
+trange2 = 0.05:0.01:0.13
 mus2 = find_pseudo_crit_mu.(trange2, param, 1e-2)
 
 plot(mus, trange, lab=L"\partial^2m/\partial T^2 = 0")
@@ -72,15 +72,15 @@ plot!(musmu, trangemu)
 plot!(mus2, trange2, marker=:circle)
 scatter!([1.1281], [0.0])
 
-crit_l = PhaseGN.critical_line.(0.03:0.005:0.73, param)
+crit_l = PhaseGN.critical_line.(tlist, param)
 
-plot!(crit_l, 0.03:0.005:0.73)
+plot!(crit_l, tlist)
 
 tlist = union(0.0, trange2, trange)
 mulist = union(1.1281, mus2, mus)
 
 scalefontsizes(1.2)
-plot(mulist, tlist, lab=L"\partial^2m/\partial T^2 = 0")
+plot(mulist, tlist)
 
 function jacob(T, mu, param, dx=5e-2)
     d2t = d2m_dt2(T, mu, param, dx)
@@ -127,3 +127,14 @@ p1 = @pgf Axis(
 )
 
 pgfsave("new_non_chiral_case.pdf", p1)
+
+writedlm("fig_1_phase_diagram.csv", hcat(tlist, mulist, crit_l), ',')
+
+function phi_value(x, x_list, y_list)
+    i = searchsortedfirst(x_list, x)
+    if x_list[i]==x
+        return y_list[i]
+    end
+
+    return y_list[i-1] + (x - x_list[i-1])*(y_list[i] - y_list[i-1])/(x_list[i] - x_list[i-1])
+end

@@ -34,4 +34,8 @@ p1 = @pgf Axis(
     HLine({dashed}, 1 / 2)
 )
 
+using DelimitedFiles
+
+writedlm("fig_3_speed_of_sound.csv", hcat(trange[1:end-1], cs2))
+
 pgfsave("$(save_dir)/plots/5M/speed_of_sound.pdf", p1)

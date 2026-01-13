@@ -3,7 +3,7 @@ using Plots
 
 T = 1.0
 
-param = Parameters(Λ=5.0, κ=kappa01(5.0))
+param = Parameters(Λ=5.0, κ=0.046)
 
 
 qmott = data[31, 2]
@@ -91,6 +91,8 @@ end
 
 p
 
+
+writedlm("fig_8_a_resurrection_bound_state.csv", hcat(ωrange.^2, data_phase_shift), ',')
 
 pgfsave("$(save_dir)/plots/5M/phase_shift_q_dependence.pdf", p)
 

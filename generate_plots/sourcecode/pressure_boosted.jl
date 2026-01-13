@@ -10,8 +10,18 @@ function delta_integrand(ω, q, T, param)
     return delta_phi(ω, q, T, param) * q / ((exp(ω / T) - 1.0) * 2π^2)
 end
 
+function delta_integrand_gen(ω, q, T, param)
+    del = delta_phi(ω, q, T, param)
+    return (del - sin(2*del)/2) * q / ((exp(ω / T) - 1.0) * 2π^2)
+end
+
 function pressure_fluctuation(T, param)
     integrand(x) = delta_integrand(x[1], x[2], T, param) / T^3
+    return PhaseGN.hcubature(integrand, [0.0, 0.0], [6 * T, 6 * T], reltol=1e-2)
+end
+
+function pressure_fluctuation_gen(T, param)
+    integrand(x) = delta_integrand_gen(x[1], x[2], T, param) / T^3
     return PhaseGN.hcubature(integrand, [0.0, 0.0], [6 * T, 6 * T], reltol=1e-2)
 end
 using ProgressMeter

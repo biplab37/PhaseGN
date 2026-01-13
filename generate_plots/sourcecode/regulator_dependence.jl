@@ -21,7 +21,7 @@ function four_line(T, cutoff)
 end
 
 trange = 0.01:0.01:0.8
-plot!(crit_line.(trange), trange)
+plot(crit_line.(trange), trange)
 plot!(four_line.(trange, 5.0), trange)
 
 function zero_line(T, mu, lambda)
@@ -35,8 +35,10 @@ function tcp(Λ)
     return PhaseGN.bisection(x -> fourth_term(x, crit_line(x), Λ), 0.01, 0.8)
 end
 
-lambda_range =
+lambda_range = [2, 3, 5, 10, 100]
     tcps = [tcp(l) for l in lambda_range]
+
+writedlm("fig_12_b_TCpoints.csv", hcat(lambda_range, tcps), ',')
 
 scatter!(crit_line.(tcps), tcps)
 
@@ -250,6 +252,9 @@ p3 = @pgf Axis(
 
 pgfsave("phase_diagram_regulator.pdf", p3)
 
+writedlm("fig_12_a_phase_diagram_cutoff.csv", hcat(trange2, crit_line.(trange2), second_line), ',')
+
+writedlm("fig_12_a_critical_line_cutoff.csv", hcat(trange, mulist), ',')
 
 function find_mass2(T, mu, kappa, lambda)
     f(x) = der_omega(x, T, mu, kappa, lambda)

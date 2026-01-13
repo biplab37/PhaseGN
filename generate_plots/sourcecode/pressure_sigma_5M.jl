@@ -29,12 +29,12 @@ end
 
 function pressure_fluctuation(T, param)
     integrand(x) = delta_integrand(x[1], x[2], T, param) / T^3
-    return PhaseGN.hcubature(integrand, [0.0, 0.0], [min(10 * T, sqrt(5) * param.Λ), min(10 * T, param.Λ)], reltol=1e-1)
+    return PhaseGN.hcubature(integrand, [0.0, 0.0], [min(10 * T, sqrt(5) * param.Λ), min(10 * T, param.Λ)], reltol=1e-2)
 end
 param = Parameters(Λ=5.0, κ=kappa01(5.0))
 
 using ProgressMeter
-
+using DelimitedFiles
 
 function pressure_fluctuations(trange, param, file)
     pressures = zeros(length(trange))
@@ -49,7 +49,14 @@ end
 trange = range(0.1, 2.0, length=60)
 param = Parameters(Λ=5.0, κ=kappa01(5.0))
 
-file = open("pressure_fluc_with_k2_5M.dat", "a")
+file = open("pressure_fluc_with_k2_5M_25dec2.dat", "a")
 
 @time pressures = pressure_fluctuations(trange, param, file)
+using Plots
+
+plot(pressures)
 close(file)
+
+pres2 = readdlm("pressure_fluc_with_k2_5M_25dec2.dat")
+scatter(pres2[:, 1], pres2[:, 2], marker=:circle)
+

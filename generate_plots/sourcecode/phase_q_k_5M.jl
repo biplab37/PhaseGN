@@ -14,6 +14,8 @@ Threads.@threads for i in eachindex(tlist)
     phases_phi[:, i] = last.(delta_phi.(ωrange, q, tlist[i], param))
 end
 
+writedlm("fig_7_phase_q.csv", [ωrange phases_phi], ',')
+
 # save the data
 using DelimitedFiles
 

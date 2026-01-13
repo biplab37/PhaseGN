@@ -101,6 +101,8 @@ end
 plot(trange, Moott_momenta, marker=:circle, xlabel="T", ylabel="q", title="Mott momenta", lab="")
 plot!(trange, t -> (t < 0.98) ? 0.0 : 10 * sqrt((t - 0.95)^2 - (0.98 - 0.95)^2))
 
+writedlm("fig_8_b_mott_momenta.csv", hcat(trange, Moott_momenta), ',')
+
 using LsqFit
 
 @. model(x, p) = p[1] * sqrt((x - 0.93)^2 - (0.98 - 0.93)^2)

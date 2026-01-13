@@ -1,7 +1,7 @@
 
 using LaTeXStrings, PGFPlotsX
 κ = kappa01(5.0)
-p = Parameters(Λ=5.0, κ=κ)
+p = Parameters(Λ=5.0, κ=0.046)
 trange = 0.01:0.01:1.15
 μ = 0.0
 m = σ1.(trange, μ, p);

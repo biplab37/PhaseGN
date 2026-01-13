@@ -7,6 +7,7 @@ function delta_phi(ω, q, T, param)
     return atan(impi, repi)
 end
 
+
 function phase_shifts(ωrange, q, T, param)
     return delta_phi.(ωrange, q, T, param)
 end
@@ -44,10 +45,10 @@ function boosted_fixed_pressure(phi, temp, mu, param)
     return PhaseGN.integrate(func, 0.0, 5 * param.Λ^2)
 end
 
-phi_zero(ω, temp, mu, param) = delta_phi(ω, 0.0, temp, param)
+phi_zero(ω, temp, mu, param) = delta_phi(ω, 0.0, temp, param)[3]
 
 
-boosted_phase_shift_dat2 = boosted_fixed_pressure(phi_zero, T1, 0.0, param)
+ boosted_fixed_pressure(phi_zero, T1, 0.0, param)
 
 T1, T2 = 0.5, 1.0
 

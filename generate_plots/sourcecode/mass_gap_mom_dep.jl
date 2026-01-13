@@ -1,6 +1,6 @@
 using PhaseGN, PGFPlotsX, LaTeXStrings
 
-param = Parameters(Λ=5.0, κ=kappa01(5.0))
+param = Parameters(Λ=5.0, κ=0.046)
 param2 = Parameters(Λ=5.0, κ=0.0)
 
 trange = 0.01:0.01:2.0
@@ -74,3 +74,4 @@ p = @pgf Axis(
 
 pgfsave("mass_gap_momentum_dep.svg", p)
 
+writedlm("fig_6_mass_gap_mom_dep.csv", hcat(trange, masses_k[1, :], masses_k[2,:], masses_k[3,:], masses_k0[1,:]), ',')

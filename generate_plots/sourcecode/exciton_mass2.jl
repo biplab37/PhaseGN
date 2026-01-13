@@ -217,6 +217,8 @@ p = @pgf Axis(
     LegendEntry(L"M_\varphi"),
 )
 
+writedlm("fig_4_a_exciton_masses.csv", hcat(trange5, 2 .*mass, new_msigmas, new_mphis), ',')
+
 pgfsave("exciton_masses.pdf", p)
 
 plot(trange5, [new_width_phi new_width_sigma])
@@ -249,5 +251,7 @@ p2 = @pgf Axis(
     LegendEntry(L"\Gamma_\sigma"))
 
 pgfsave("width.pdf", p2)
+
+writedlm("fig_4_b_widths.csv", hcat(trange5, new_width_phi, new_width_sigma), ',')
 
 delta_phi_at_threshold(0.0, 0.999, param)
