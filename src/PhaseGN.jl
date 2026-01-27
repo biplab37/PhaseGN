@@ -10,6 +10,7 @@ using Cubature, PolyLog
 using NLsolve: nlsolve
 using RecipesBase
 using Interpolations
+using AdaptiveSparseGrids
 
 include("parameters.jl")
 include("helperfunction.jl")
@@ -29,10 +30,13 @@ include("phase_defn.jl")
 include("momentum_effect_on_pressure.jl")
 include("mott.jl")
 # include("phase_transition_order.jl")
-include("interpolated_functions.jl")
 
 include("3D/3d.jl")
 include("Spectral/spectral.jl")
 include("Spectral/plasmon.jl")
+# include("gridded_calculations.jl")
+
+include("interpolated_functions.jl")
+include("Interpolations/interpolations.jl")
 
 end

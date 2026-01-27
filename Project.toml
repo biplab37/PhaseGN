@@ -4,6 +4,7 @@ version = "0.1.0"
 authors = ["biplab37 <biplabmahato37@gmail.com>"]
 
 [deps]
+AdaptiveSparseGrids = "676d8d29-539e-4f06-b848-7dd647dd5291"
 Cubature = "667455a9-e2ce-5579-9412-b964f529a492"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 Interpolations = "a98d9a8b-a2ab-59e6-89dd-64a1c18fca59"
@@ -14,4 +15,5 @@ Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 UsefulFunctions = "3faa5a7b-8411-4986-9283-d50561d89da5"
 
 [compat]
+AdaptiveSparseGrids = "0.3.0"
 Interpolations = "0.16.2"

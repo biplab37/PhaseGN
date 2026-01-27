@@ -104,4 +104,17 @@ function number_MF(trange::AbstractVector, μ, param::Parameters, norm=false::Bo
     end
 end
 
-export pressure_MF, energy_MF, number_MF, Omega
+function entropy_MF(temp, mu, param::Parameters; norm=false::Bool)
+    m = σ1(temp, mu, param)
+    β = 1/temp
+    expm = exp(-β*(m-mu))
+    expp = exp(-β*(m+mu))
+    entropy = (m*β^2*((m-mu)*log(1 + expm) + (m+mu)*log(1+expp)) + β*(-3m + mu)*reli2(-expm) - β*(3m + mu)*reli2(-expp) - 3*reli3(-expm) - 3*reli3(-expp))/(π*β^2)
+    if norm
+        return entropy/temp^2
+    else
+        return entropy
+    end
+end
+
+export pressure_MF, energy_MF, number_MF, Omega, entropy_MF
